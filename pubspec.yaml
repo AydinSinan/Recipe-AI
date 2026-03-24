@@ -1,0 +1,57 @@
+name: recipe_ai
+description: AI-powered multi-cultural recipe app
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  provider: ^6.1.1
+
+  # HTTP
+  http: ^1.2.0
+
+  #Push Notification
+  firebase_messaging: ^15.0.0
+  flutter_local_notifications: ^17.0.0
+
+  # Firebase
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  google_sign_in: ^6.2.1
+
+  # Subscription
+  purchases_flutter: ^8.0.0
+
+  # Local Storage
+  shared_preferences: ^2.3.2
+
+  # UI
+  google_fonts: ^6.2.1
+  shimmer: ^3.0.0
+
+  # Utils
+  intl: ^0.20.2
+  uuid: ^4.5.1
+
+dev_dependencies:
+  flutter_launcher_icons: ^0.14.1
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/icon.png"
