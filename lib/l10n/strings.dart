@@ -86,6 +86,10 @@ class AppStrings {
       'sign_out': 'Çıkış Yap',
       'about': 'Hakkında',
       'version': 'Versiyon',
+
+      // Sharing
+      'share_whatsapp': 'WhatsApp\'ta Paylaş',
+      'share_not_available': 'WhatsApp bu cihazda bulunamadı',
     },
     'en': {
       // General
@@ -173,6 +177,10 @@ class AppStrings {
       'sign_out': 'Sign Out',
       'about': 'About',
       'version': 'Version',
+
+      // Sharing
+      'share_whatsapp': 'Share on WhatsApp',
+      'share_not_available': 'WhatsApp not found on this device',
     },
   };
 

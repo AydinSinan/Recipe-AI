@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+import 'package:url_launcher/url_launcher.dart';
 import '../models/models.dart';
 import '../providers/app_provider.dart';
 import '../theme.dart';
@@ -81,11 +80,26 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     return buffer.toString();
   }
 
-  void _shareWhatsApp(String lang) {
+  Future<void> _shareWhatsApp(String lang) async {
     final text = _buildShareText(lang);
     final encoded = Uri.encodeComponent(text);
+
     if (kIsWeb) {
-      html.window.open('https://wa.me/?text=$encoded', '_blank');
+      final uri = Uri.parse('https://wa.me/?text=$encoded');
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      final uri = Uri.parse('whatsapp://send?text=$encoded');
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppStrings.get('share_not_available', lang)),
+            ),
+          );
+        }
+      }
     }
   }
 
