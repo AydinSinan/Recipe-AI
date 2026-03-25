@@ -6,6 +6,7 @@ import '../theme.dart';
 import '../l10n/strings.dart';
 import '../widgets/widgets.dart';
 import 'recipe_detail_screen.dart';
+import 'grocery_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -125,6 +126,59 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ),
                               ),
                               const Spacer(),
+                              // Alışveriş listesi butonu
+                              GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const GroceryListScreen(),
+                                  ),
+                                ),
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(9),
+                                      decoration: BoxDecoration(
+                                        color: AppTheme.surfaceCard,
+                                        borderRadius:
+                                            BorderRadius.circular(12),
+                                        border: Border.all(
+                                            color: AppTheme.divider),
+                                      ),
+                                      child: const Icon(
+                                        Icons.shopping_cart_outlined,
+                                        size: 20,
+                                        color: AppTheme.secondary,
+                                      ),
+                                    ),
+                                    if (provider.groceryList.isNotEmpty)
+                                      Positioned(
+                                        top: -4,
+                                        right: -4,
+                                        child: Container(
+                                          width: 16,
+                                          height: 16,
+                                          decoration: const BoxDecoration(
+                                            color: AppTheme.secondary,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              '${provider.groceryList.length > 99 ? '99+' : provider.groceryList.length}',
+                                              style: GoogleFonts.lato(
+                                                fontSize: 9,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 10),
                               GestureDetector(
                                 onTap: () => provider.setLanguage(
                                     lang == 'tr' ? 'en' : 'tr'),

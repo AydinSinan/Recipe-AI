@@ -9,6 +9,7 @@ class StorageService {
   static const String _apiKeyKey = 'api_key';
   static const String _recentSearchesKey = 'recent_searches';
   static const String _dietaryFiltersKey = 'dietary_filters';
+  static const String _groceryListKey = 'grocery_list';
 
   // ── Favorites ────────────────────────────────────────────────────────────
   Future<List<Recipe>> getFavorites() async {
@@ -119,6 +120,21 @@ class StorageService {
     await prefs.setStringList(
       _recentSearchesKey,
       current.take(10).toList(),
+    );
+  }
+
+  // ── Grocery List ──────────────────────────────────────────────────────────
+  Future<List<GroceryItem>> getGroceryList() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getStringList(_groceryListKey) ?? [];
+    return raw.map((s) => GroceryItem.fromJson(jsonDecode(s))).toList();
+  }
+
+  Future<void> saveGroceryList(List<GroceryItem> items) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(
+      _groceryListKey,
+      items.map((i) => jsonEncode(i.toJson())).toList(),
     );
   }
 

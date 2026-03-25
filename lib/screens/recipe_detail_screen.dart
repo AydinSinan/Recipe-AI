@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/models.dart';
+import 'grocery_list_screen.dart';
 import '../providers/app_provider.dart';
 import '../theme.dart';
 import '../l10n/strings.dart';
@@ -154,6 +155,54 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                     ),
                     child: const Icon(Icons.share_rounded,
                         color: Color(0xFF25D366), size: 22),
+                  ),
+                ),
+              ),
+              // Alışveriş listesi butonu
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: GestureDetector(
+                  onTap: () async {
+                    final added =
+                        await provider.addRecipeToGrocery(recipe);
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            added
+                                ? AppStrings.get('grocery_added', lang)
+                                : AppStrings.get(
+                                    'grocery_already_added', lang),
+                          ),
+                          action: added
+                              ? SnackBarAction(
+                                  label: lang == 'tr' ? 'Gör' : 'View',
+                                  onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const GroceryListScreen(),
+                                    ),
+                                  ),
+                                )
+                              : null,
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppTheme.secondary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.08),
+                            blurRadius: 10)
+                      ],
+                    ),
+                    child: Icon(Icons.shopping_cart_outlined,
+                        color: AppTheme.secondary, size: 22),
                   ),
                 ),
               ),

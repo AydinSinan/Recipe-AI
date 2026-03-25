@@ -228,3 +228,44 @@ class AppUser {
     preferredLanguage: json['preferredLanguage'] ?? 'tr',
   );
 }
+
+// ── GroceryItem ───────────────────────────────────────────────────────────────
+class GroceryItem {
+  final String id;
+  final String name;
+  final String amount;
+  final String unit;
+  final String recipeId;
+  final String recipeName;
+  bool isChecked;
+
+  GroceryItem({
+    required this.id,
+    required this.name,
+    required this.amount,
+    required this.unit,
+    required this.recipeId,
+    required this.recipeName,
+    this.isChecked = false,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'amount': amount,
+    'unit': unit,
+    'recipeId': recipeId,
+    'recipeName': recipeName,
+    'isChecked': isChecked,
+  };
+
+  factory GroceryItem.fromJson(Map<String, dynamic> json) => GroceryItem(
+    id: json['id'],
+    name: json['name'],
+    amount: json['amount'] ?? '',
+    unit: json['unit'] ?? '',
+    recipeId: json['recipeId'] ?? '',
+    recipeName: json['recipeName'] ?? '',
+    isChecked: json['isChecked'] ?? false,
+  );
+}

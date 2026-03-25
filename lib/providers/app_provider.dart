@@ -28,6 +28,7 @@ class AppProvider extends ChangeNotifier {
   List<Recipe> _favorites = [];
   List<String> _selectedCuisines = [];
   List<String> _selectedDietaryFilters = [];
+  List<GroceryItem> _groceryList = [];
   Map<String, int> _calorieMap = {};
   MealPlan? _mealPlan;
   String? _errorMessage;
@@ -51,6 +52,8 @@ class AppProvider extends ChangeNotifier {
   List<Recipe> get favorites => _favorites;
   List<String> get selectedCuisines => _selectedCuisines;
   List<String> get selectedDietaryFilters => _selectedDietaryFilters;
+  List<GroceryItem> get groceryList => _groceryList;
+  int get groceryCheckedCount => _groceryList.where((i) => i.isChecked).length;
   Map<String, int> get calorieMap => _calorieMap;
   MealPlan? get mealPlan => _mealPlan;
   String? get errorMessage => _errorMessage;
@@ -97,6 +100,7 @@ class AppProvider extends ChangeNotifier {
     _favorites = await _storage.getFavorites();
     _mealPlan = await _storage.getMealPlan();
     _selectedDietaryFilters = await _storage.getDietaryFilters();
+    _groceryList = await _storage.getGroceryList();
 
     final today = DateTime.now().toIso8601String().substring(0, 10);
     final lastDate = _userData?['dailySearchDate'] ?? '';
@@ -231,6 +235,46 @@ class AppProvider extends ChangeNotifier {
   Future<void> clearDietaryFilters() async {
     _selectedDietaryFilters = [];
     await _storage.saveDietaryFilters(_selectedDietaryFilters);
+    notifyListeners();
+  }
+
+  // ── Grocery List ──────────────────────────────────────────────────────────
+  Future<bool> addRecipeToGrocery(Recipe recipe) async {
+    final alreadyAdded = _groceryList.any((i) => i.recipeId == recipe.id);
+    if (alreadyAdded) return false;
+
+    final newItems = recipe.ingredients.map((ing) => GroceryItem(
+      id: '${recipe.id}_${ing.name}',
+      name: ing.name,
+      amount: ing.amount,
+      unit: ing.unit,
+      recipeId: recipe.id,
+      recipeName: recipe.name,
+    )).toList();
+
+    _groceryList.addAll(newItems);
+    await _storage.saveGroceryList(_groceryList);
+    notifyListeners();
+    return true;
+  }
+
+  Future<void> toggleGroceryItem(String itemId) async {
+    final idx = _groceryList.indexWhere((i) => i.id == itemId);
+    if (idx == -1) return;
+    _groceryList[idx].isChecked = !_groceryList[idx].isChecked;
+    await _storage.saveGroceryList(_groceryList);
+    notifyListeners();
+  }
+
+  Future<void> removeGroceryRecipe(String recipeId) async {
+    _groceryList.removeWhere((i) => i.recipeId == recipeId);
+    await _storage.saveGroceryList(_groceryList);
+    notifyListeners();
+  }
+
+  Future<void> clearGroceryList() async {
+    _groceryList = [];
+    await _storage.saveGroceryList(_groceryList);
     notifyListeners();
   }
 
