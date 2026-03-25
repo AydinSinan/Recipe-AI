@@ -2,12 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
+import '../services/subscription_service.dart';
 import '../theme.dart';
 import '../l10n/strings.dart';
 import 'paywall_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool _isRestoring = false;
+
+  Future<void> _restore(String lang) async {
+    setState(() => _isRestoring = true);
+    try {
+      final success = await SubscriptionService.restorePurchases();
+      if (!mounted) return;
+      if (success) {
+        await context.read<AppProvider>().refreshPremiumStatus();
+        if (!mounted) return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(success
+              ? AppStrings.get('subscription_refreshed', lang)
+              : (lang == 'tr'
+                  ? 'Geri yüklenecek satın alma bulunamadı.'
+                  : 'No purchases found to restore.')),
+          backgroundColor: success ? AppTheme.secondary : AppTheme.error,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isRestoring = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +225,103 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+          ],
+
+          // ── Subscription Management (premium kullanıcılar) ────────────────
+          if (isPremium) ...[
+            _sectionTitle(AppStrings.get('subscription_section', lang)),
+            const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceCard,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppTheme.divider),
+              ),
+              child: Column(
+                children: [
+                  // Aktif rozet
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 14),
+                    child: Row(
+                      children: [
+                        const Text('👑', style: TextStyle(fontSize: 22)),
+                        const SizedBox(width: 14),
+                        Text(
+                          AppStrings.get('subscription_active', lang),
+                          style: GoogleFonts.lato(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: AppTheme.textPrimary,
+                          ),
+                        ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppTheme.secondary.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            lang == 'tr' ? 'Aktif' : 'Active',
+                            style: GoogleFonts.lato(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.secondary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(height: 1, indent: 56),
+                  // Aboneliği Yönet
+                  ListTile(
+                    leading: const Icon(Icons.open_in_new_rounded,
+                        color: AppTheme.primary, size: 22),
+                    title: Text(
+                      AppStrings.get('subscription_manage', lang),
+                      style: GoogleFonts.lato(
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.primary,
+                      ),
+                    ),
+                    subtitle: Text(
+                      AppStrings.get('subscription_cancel_info', lang),
+                      style: GoogleFonts.lato(
+                          fontSize: 12, color: AppTheme.textHint),
+                    ),
+                    trailing: const Icon(Icons.chevron_right_rounded,
+                        color: AppTheme.primary),
+                    onTap: () => SubscriptionService.manageSubscription(),
+                  ),
+                  const Divider(height: 1, indent: 56),
+                  // Geri Yükle
+                  ListTile(
+                    leading: _isRestoring
+                        ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    AppTheme.primary)),
+                          )
+                        : const Icon(Icons.refresh_rounded,
+                            color: AppTheme.textHint, size: 22),
+                    title: Text(
+                      AppStrings.get('subscription_restore', lang),
+                      style: GoogleFonts.lato(
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textSecondary),
+                    ),
+                    onTap: _isRestoring ? null : () => _restore(lang),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
           ],
 
           // ── Usage Stats ───────────────────────────────────────────────────

@@ -102,6 +102,14 @@ class AppStrings {
       'grocery_items_count': 'ürün',
       'grocery_checked_count': 'tamamlandı',
 
+      // Subscription Management
+      'subscription_section': 'ABONELİK',
+      'subscription_active': 'Premium Aktif 👑',
+      'subscription_manage': 'Aboneliği Yönet',
+      'subscription_restore': 'Satın Almaları Geri Yükle',
+      'subscription_cancel_info': 'İptal için mağaza üzerinden aboneliğinizi yönetin.',
+      'subscription_refreshed': 'Abonelik durumu güncellendi.',
+
       // Upgrade / Account Linking
       'upgrade_title': 'Ücretsiz hesap oluştur',
       'upgrade_subtitle': 'Arama hakkın bitti. Ücretsiz hesap açarak verilerini koru ve devam et.',
@@ -224,6 +232,14 @@ class AppStrings {
       'grocery_clear_confirm': 'Clear the entire list?',
       'grocery_items_count': 'items',
       'grocery_checked_count': 'done',
+
+      // Subscription Management
+      'subscription_section': 'SUBSCRIPTION',
+      'subscription_active': 'Premium Active 👑',
+      'subscription_manage': 'Manage Subscription',
+      'subscription_restore': 'Restore Purchases',
+      'subscription_cancel_info': 'To cancel, manage your subscription in the store.',
+      'subscription_refreshed': 'Subscription status updated.',
 
       // Upgrade / Account Linking
       'upgrade_title': 'Create a free account',

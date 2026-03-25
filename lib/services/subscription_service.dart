@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../config/config.dart';
 
 class SubscriptionService {
@@ -79,6 +81,28 @@ class SubscriptionService {
     } on PurchasesErrorCode catch (e) {
       if (e == PurchasesErrorCode.purchaseCancelledError) return false;
       rethrow;
+    }
+  }
+
+  // ── Manage Subscription (mağaza sayfasını açar) ───────────────────────────
+  static Future<void> manageSubscription() async {
+    if (kIsWeb) return;
+
+    Uri uri;
+    if (Platform.isIOS || Platform.isMacOS) {
+      uri = Uri.parse('https://apps.apple.com/account/subscriptions');
+    } else {
+      // Android: aktif ürün ID ile Play Store abonelik sayfası
+      const packageName = 'com.snnydn.recipeai';
+      const productId = SubscriptionConfig.yearlyProductId;
+      uri = Uri.parse(
+        'https://play.google.com/store/account/subscriptions'
+        '?sku=$productId&package=$packageName',
+      );
+    }
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 
