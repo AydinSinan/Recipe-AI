@@ -105,6 +105,8 @@ class RecipeCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(recipe.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.playfairDisplay(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -310,41 +312,49 @@ class NutritionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final percent = (value / max).clamp(0.0, 1.0);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(label,
-                style: GoogleFonts.lato(
-                    fontSize: 13,
-                    color: AppTheme.textSecondary,
-                    fontWeight: FontWeight.w500)),
-          ),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: percent,
-                backgroundColor: color.withOpacity(0.1),
-                valueColor: AlwaysStoppedAnimation<Color>(color),
-                minHeight: 8,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final labelWidth = (constraints.maxWidth * 0.30).clamp(80.0, 120.0);
+        final valueWidth = (constraints.maxWidth * 0.15).clamp(44.0, 64.0);
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
+            children: [
+              SizedBox(
+                width: labelWidth,
+                child: Text(label,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.lato(
+                        fontSize: 13,
+                        color: AppTheme.textSecondary,
+                        fontWeight: FontWeight.w500)),
               ),
-            ),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: percent,
+                    backgroundColor: color.withValues(alpha: 0.1),
+                    valueColor: AlwaysStoppedAnimation<Color>(color),
+                    minHeight: 8,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              SizedBox(
+                width: valueWidth,
+                child: Text('${value.toStringAsFixed(1)}$unit',
+                    textAlign: TextAlign.right,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.lato(
+                        fontSize: 13,
+                        color: AppTheme.textPrimary,
+                        fontWeight: FontWeight.w600)),
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 50,
-            child: Text('${value.toStringAsFixed(1)}$unit',
-                textAlign: TextAlign.right,
-                style: GoogleFonts.lato(
-                    fontSize: 13,
-                    color: AppTheme.textPrimary,
-                    fontWeight: FontWeight.w600)),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
