@@ -124,11 +124,13 @@ Expected format:
   }
 
   // Dev: Direkt Anthropic (Chrome'da çalışır, production'da kullanma)
+  // API key'i buraya yazmak yerine .env dosyasından veya lokal config'den al.
+  // devMode sadece local geliştirme için — config.dart'ta devMode=false bırak.
   Future<String> _callDirect(String prompt) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) throw Exception('Giriş yapılmamış');
 
-    const devApiKey = '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';
+    const devApiKey = '';
 
     final res = await http.post(
       Uri.parse(ApiConfig.claudeDirectUrl),

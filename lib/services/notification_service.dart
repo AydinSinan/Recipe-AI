@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Background message handler — top-level fonksiyon olmalı
 @pragma('vm:entry-point')
@@ -15,8 +17,8 @@ class NotificationService {
 
   static const AndroidNotificationChannel _channel = AndroidNotificationChannel(
     'recipeai_channel',
-    'RecipeAI Bildirimleri',
-    description: 'RecipeAI uygulama bildirimleri',
+    'RecipeAI Notifications',
+    description: 'RecipeAI app notifications',
     importance: Importance.high,
   );
 
@@ -73,15 +75,23 @@ class NotificationService {
       _showLocalNotification(message);
     });
 
-    // FCM token al
+    // FCM token al ve kaydet
     final token = await _messaging.getToken();
-    print('FCM Token: $token');
+    if (token != null) await _saveTokenToFirestore(token);
 
     // Token yenilenince güncelle
     _messaging.onTokenRefresh.listen((token) {
-      print('FCM Token yenilendi: $token');
-      // TODO: token'ı Firestore'a kaydet
+      _saveTokenToFirestore(token);
     });
+  }
+
+  static Future<void> _saveTokenToFirestore(String token) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .set({'fcmToken': token}, SetOptions(merge: true));
   }
 
   static Future<void> _showLocalNotification(RemoteMessage message) async {
