@@ -49,3 +49,4 @@ lib/firebase_options.dart
 
 # IOS
 /ios/.generated
+/.claude/
