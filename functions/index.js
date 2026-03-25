@@ -1,11 +1,14 @@
-const functions = require("firebase-functions");
+const { onRequest } = require("firebase-functions/v2/https");
+const { defineSecret } = require("firebase-functions/params");
 const admin = require("firebase-admin");
 const https = require("https");
 
 admin.initializeApp();
 
-async function callAnthropic(prompt) {
-  const apiKey = process.env.ANTHROPIC_KEY;
+const anthropicKey = defineSecret("ANTHROPIC_KEY");
+
+// ── Anthropic API çağrısı ──────────────────────────────────────────────────
+async function callAnthropic(prompt, apiKey) {
   const body = JSON.stringify({
     model: "claude-haiku-4-5-20251001",
     max_tokens: 4096,
@@ -64,73 +67,53 @@ async function verifyAuth(req, res) {
 }
 
 // ── generateRecipes endpoint ──────────────────────────────────────────────
-exports.generateRecipes = functions
-  .region("europe-west1")
-  .runWith({ secrets: ["ANTHROPIC_KEY"] })
-  .https.onRequest(async (req, res) => {
+exports.generateRecipes = onRequest(
+  { region: "europe-west1", secrets: [anthropicKey] },
+  async (req, res) => {
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-    if (req.method === "OPTIONS") {
-      res.status(204).send("");
-      return;
-    }
-
-    if (req.method !== "POST") {
-      res.status(405).json({ error: "Sadece POST desteklenir" });
-      return;
-    }
+    if (req.method === "OPTIONS") return res.status(204).send("");
+    if (req.method !== "POST") return res.status(405).json({ error: "Sadece POST desteklenir" });
 
     const user = await verifyAuth(req, res);
     if (!user) return;
 
     const { prompt } = req.body;
-    if (!prompt) {
-      res.status(400).json({ error: "Prompt eksik" });
-      return;
-    }
+    if (!prompt) return res.status(400).json({ error: "Prompt eksik" });
 
     try {
-      const text = await callAnthropic(prompt);
+      const text = await callAnthropic(prompt, anthropicKey.value());
       res.status(200).json({ text });
     } catch (e) {
       console.error("generateRecipes hatası:", e);
       res.status(500).json({ error: e.message });
     }
-  });
+  }
+);
 
 // ── getCalories endpoint ──────────────────────────────────────────────────
-exports.getCalories = functions
-  .region("europe-west1")
-  .runWith({ secrets: ["ANTHROPIC_KEY"] })
-  .https.onRequest(async (req, res) => {
+exports.getCalories = onRequest(
+  { region: "europe-west1", secrets: [anthropicKey] },
+  async (req, res) => {
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-    if (req.method === "OPTIONS") {
-      res.status(204).send("");
-      return;
-    }
-
-    if (req.method !== "POST") {
-      res.status(405).json({ error: "Sadece POST desteklenir" });
-      return;
-    }
+    if (req.method === "OPTIONS") return res.status(204).send("");
+    if (req.method !== "POST") return res.status(405).json({ error: "Sadece POST desteklenir" });
 
     const user = await verifyAuth(req, res);
     if (!user) return;
 
     const { prompt } = req.body;
-    if (!prompt) {
-      res.status(400).json({ error: "Prompt eksik" });
-      return;
-    }
+    if (!prompt) return res.status(400).json({ error: "Prompt eksik" });
 
     try {
-      const text = await callAnthropic(prompt);
+      const text = await callAnthropic(prompt, anthropicKey.value());
       res.status(200).json({ text });
     } catch (e) {
       console.error("getCalories hatası:", e);
       res.status(500).json({ error: e.message });
     }
-  });
+  }
+);
