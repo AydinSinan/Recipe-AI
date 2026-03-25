@@ -100,6 +100,37 @@ class AuthService {
     }
   }
 
+  // ── Link Anonymous → Google ───────────────────────────────────────────────
+  Future<UserCredential?> linkAnonymousWithGoogle() async {
+    try {
+      if (kIsWeb) {
+        final provider = GoogleAuthProvider()
+          ..addScope('email')
+          ..addScope('profile');
+        final result = await _auth.currentUser!.linkWithPopup(provider);
+        await _createOrUpdateUser(result.user!);
+        return result;
+      } else {
+        final googleUser = await _googleSignIn.signIn();
+        if (googleUser == null) return null;
+        final googleAuth = await googleUser.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        final result = await _auth.currentUser!.linkWithCredential(credential);
+        await _createOrUpdateUser(result.user!);
+        return result;
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'credential-already-in-use') {
+        // Hesap zaten var — normal giriş yap
+        return await signInWithGoogle();
+      }
+      throw Exception('Hesap bağlama hatası: ${e.message}');
+    }
+  }
+
   // ── Anonymous ─────────────────────────────────────────────────────────────
   Future<UserCredential> signInAnonymously() async {
     try {

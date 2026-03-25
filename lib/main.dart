@@ -13,6 +13,7 @@ import 'screens/profile_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/paywall_screen.dart';
 import 'screens/onboarding_screen.dart';
+import 'screens/upgrade_sheet.dart';
 import 'services/subscription_service.dart';
 import 'services/notification_service.dart';
 import 'theme.dart';
@@ -119,7 +120,16 @@ class MainShell extends StatelessWidget {
     final provider = context.watch<AppProvider>();
     final lang = provider.language;
 
-    if (provider.errorMessage != null &&
+    if (provider.showUpgradePrompt) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => const UpgradeSheet(),
+        );
+      });
+    } else if (provider.errorMessage != null &&
         (provider.errorMessage!.contains('Premium') ||
             provider.errorMessage!.contains('limit'))) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -149,7 +159,7 @@ class MainShell extends StatelessWidget {
               const Border(top: BorderSide(color: AppTheme.divider, width: 1)),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.textPrimary.withOpacity(0.04),
+              color: AppTheme.textPrimary.withValues(alpha: 0.04),
               blurRadius: 20,
               offset: const Offset(0, -4),
             ),
@@ -241,7 +251,7 @@ class MainShell extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isActive
-              ? AppTheme.primary.withOpacity(0.08)
+              ? AppTheme.primary.withValues(alpha: 0.08)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
         ),

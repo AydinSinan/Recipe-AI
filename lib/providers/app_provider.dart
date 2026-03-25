@@ -38,6 +38,7 @@ class AppProvider extends ChangeNotifier {
   String _language = 'tr';
   int _selectedTab = 0;
   int _dailySearchCount = 0;
+  bool _showUpgradePrompt = false;
 
   // ── Getters ───────────────────────────────────────────────────────────────
   User? get user => _user;
@@ -65,6 +66,7 @@ class AppProvider extends ChangeNotifier {
   int get cuisinesLimit => SubscriptionConfig.freeCuisinesLimit;
   bool get canAddMoreFavorites =>
       _isPremium || _favorites.length < SubscriptionConfig.freeFavoritesLimit;
+  bool get showUpgradePrompt => _showUpgradePrompt;
 
   // ── Init ──────────────────────────────────────────────────────────────────
   Future<void> initialize() async {
@@ -284,6 +286,12 @@ class AppProvider extends ChangeNotifier {
 
     if (!_isPremium &&
         _dailySearchCount >= SubscriptionConfig.freeSearchesPerDay) {
+      if (_user!.isAnonymous) {
+        // Misafir kullanıcı: paywall yerine hesap oluşturma sheet'i
+        _showUpgradePrompt = true;
+        notifyListeners();
+        return;
+      }
       _errorMessage = _language == 'tr'
           ? 'Günlük $_dailySearchCount/5 arama hakkınızı kullandınız. Premium\'a geçin!'
           : 'Daily limit reached ($_dailySearchCount/5). Upgrade to Premium!';
@@ -293,6 +301,25 @@ class AppProvider extends ChangeNotifier {
     }
 
     await _searchRecipesInternal(ingredients, incrementCounter: true);
+  }
+
+  // ── Upgrade (Anonymous → Google) ──────────────────────────────────────────
+  Future<bool> linkAnonymousWithGoogle() async {
+    try {
+      final result = await _authService.linkAnonymousWithGoogle();
+      if (result == null) return false;
+      _showUpgradePrompt = false;
+      // _onUserLoggedIn will be triggered via authStateChanges listener
+      notifyListeners();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  void dismissUpgradePrompt() {
+    _showUpgradePrompt = false;
+    notifyListeners();
   }
 
   // ── Search Internal (dil değişiminde sayaç artırmadan çağrılır) ──────────

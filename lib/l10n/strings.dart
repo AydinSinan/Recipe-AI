@@ -102,6 +102,17 @@ class AppStrings {
       'grocery_items_count': 'ürün',
       'grocery_checked_count': 'tamamlandı',
 
+      // Upgrade / Account Linking
+      'upgrade_title': 'Ücretsiz hesap oluştur',
+      'upgrade_subtitle': 'Arama hakkın bitti. Ücretsiz hesap açarak verilerini koru ve devam et.',
+      'upgrade_benefit_1': 'Favori tariflerin korunur',
+      'upgrade_benefit_2': 'Alışveriş listen kaybolmaz',
+      'upgrade_benefit_3': 'Günlük 5 arama hakkı yenilenir',
+      'upgrade_google': 'Google ile Devam Et',
+      'upgrade_later': 'Şimdi değil',
+      'upgrade_success': 'Hesabın oluşturuldu! Tüm verilerin korundu.',
+      'upgrade_error': 'Hesap oluşturulamadı. Tekrar dene.',
+
       // Dietary Filters
       'dietary_filters': 'Diyet Tercihleri',
       'dietary_filter_vegetarian': 'Vejeteryan',
@@ -213,6 +224,17 @@ class AppStrings {
       'grocery_clear_confirm': 'Clear the entire list?',
       'grocery_items_count': 'items',
       'grocery_checked_count': 'done',
+
+      // Upgrade / Account Linking
+      'upgrade_title': 'Create a free account',
+      'upgrade_subtitle': 'You\'ve used all your searches. Create a free account to keep your data and continue.',
+      'upgrade_benefit_1': 'Your favorite recipes are saved',
+      'upgrade_benefit_2': 'Your grocery list stays intact',
+      'upgrade_benefit_3': 'Daily 5 searches reset every day',
+      'upgrade_google': 'Continue with Google',
+      'upgrade_later': 'Not now',
+      'upgrade_success': 'Account created! All your data is preserved.',
+      'upgrade_error': 'Could not create account. Please try again.',
 
       // Dietary Filters
       'dietary_filters': 'Dietary Preferences',
