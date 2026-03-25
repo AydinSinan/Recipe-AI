@@ -128,7 +128,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.black.withOpacity(0.08), blurRadius: 10)
+                        color: Colors.black.withValues(alpha: 0.08), blurRadius: 10)
                   ],
                 ),
                 child: const Icon(Icons.arrow_back_rounded,
@@ -145,11 +145,11 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF25D366).withOpacity(0.12),
+                      color: const Color(0xFF25D366).withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 10)
                       ],
                     ),
@@ -218,7 +218,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 10)
                       ],
                     ),
@@ -238,8 +238,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppTheme.primary.withOpacity(0.12),
-                      AppTheme.accent.withOpacity(0.08),
+                      AppTheme.primary.withValues(alpha: 0.12),
+                      AppTheme.accent.withValues(alpha: 0.08),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -256,7 +256,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 14, vertical: 5),
                       decoration: BoxDecoration(
-                        color: AppTheme.primary.withOpacity(0.15),
+                        color: AppTheme.primary.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(recipe.culture,
@@ -306,7 +306,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                           .map((t) => Chip(
                                 label: Text(t),
                                 backgroundColor:
-                                    AppTheme.secondary.withOpacity(0.08),
+                                    AppTheme.secondary.withValues(alpha: 0.08),
                                 side: const BorderSide(
                                     color: AppTheme.secondary, width: 0.5),
                                 labelStyle: GoogleFonts.lato(
@@ -392,7 +392,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                 height: 36,
                 decoration: BoxDecoration(
                   color: _servings > 1
-                      ? AppTheme.primary.withOpacity(0.1)
+                      ? AppTheme.primary.withValues(alpha: 0.1)
                       : AppTheme.divider,
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -415,7 +415,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppTheme.primary.withOpacity(0.1),
+                  color: AppTheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child:
@@ -489,7 +489,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               gradient: AppTheme.warmGradient,
               boxShadow: [
                 BoxShadow(
-                    color: AppTheme.primary.withOpacity(0.3), blurRadius: 20)
+                    color: AppTheme.primary.withValues(alpha: 0.3), blurRadius: 20)
               ],
             ),
             child: Column(
@@ -561,7 +561,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                 decoration: BoxDecoration(
-                  color: AppTheme.accent.withOpacity(0.15),
+                  color: AppTheme.accent.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text('${_scaledCalories(ing.calories)} kcal',

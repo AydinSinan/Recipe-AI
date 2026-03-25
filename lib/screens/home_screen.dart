@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         ? [
                                             BoxShadow(
                                               color: AppTheme.primary
-                                                  .withOpacity(0.25),
+                                                  .withValues(alpha: 0.25),
                                               blurRadius: 8,
                                               offset: const Offset(0, 2),
                                             )

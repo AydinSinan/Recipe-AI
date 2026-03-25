@@ -49,7 +49,7 @@ class RecipeCard extends StatelessWidget {
           border: Border.all(color: AppTheme.divider),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.primary.withOpacity(0.06),
+              color: AppTheme.primary.withValues(alpha: 0.06),
               blurRadius: 20,
               offset: const Offset(0, 6),
             ),
@@ -64,8 +64,8 @@ class RecipeCard extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppTheme.primary.withOpacity(0.08),
-                    AppTheme.accent.withOpacity(0.05),
+                    AppTheme.primary.withValues(alpha: 0.08),
+                    AppTheme.accent.withValues(alpha: 0.05),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -86,7 +86,7 @@ class RecipeCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.12),
+                          color: AppTheme.primary.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(recipe.culture,
@@ -171,7 +171,7 @@ class RecipeCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _difficultyColor.withOpacity(0.12),
+                      color: _difficultyColor.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(_difficultyLabel,
@@ -206,7 +206,7 @@ class RecipeCard extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: AppTheme.secondary.withOpacity(0.1),
+                          color: AppTheme.secondary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Icon(Icons.calendar_month_outlined,
@@ -267,9 +267,9 @@ class IngredientChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: AppTheme.primary.withOpacity(0.1),
+        color: AppTheme.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -387,7 +387,7 @@ class CalorieCard extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppTheme.accent.withOpacity(0.15),
+              color: AppTheme.accent.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(Icons.eco_outlined,
@@ -430,7 +430,7 @@ class LoadingOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme.background.withOpacity(0.92),
+      color: AppTheme.background.withValues(alpha: 0.92),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -443,7 +443,7 @@ class LoadingOverlay extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: AppTheme.primary.withOpacity(0.15),
+                    color: AppTheme.primary.withValues(alpha: 0.15),
                     blurRadius: 30,
                     spreadRadius: 5,
                   ),

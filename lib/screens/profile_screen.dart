@@ -77,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: 64,
                   height: 64,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.25),
+                    color: Colors.white.withValues(alpha: 0.25),
                     shape: BoxShape.circle,
                   ),
                   child: Center(
@@ -117,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         decoration: BoxDecoration(
                           color: isPremium
                               ? Colors.amber
-                              : Colors.white.withOpacity(0.25),
+                              : Colors.white.withValues(alpha: 0.25),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
@@ -148,9 +148,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               margin: const EdgeInsets.only(bottom: 16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppTheme.accent.withOpacity(0.15),
+                color: AppTheme.accent.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.accent.withOpacity(0.4)),
+                border: Border.all(color: AppTheme.accent.withValues(alpha: 0.4)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 decoration: BoxDecoration(
                   color: AppTheme.surfaceCard,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+                  border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [

@@ -101,7 +101,7 @@ class AppTheme {
       onSurfaceVariant: textSecondary,
       outline: divider,
       outlineVariant: const Color(0xFFF0DDD0),
-      shadow: textPrimary.withOpacity(0.08),
+      shadow: textPrimary.withValues(alpha: 0.08),
       scrim: Colors.black,
       inverseSurface: textPrimary,
       onInverseSurface: surface,
@@ -156,7 +156,7 @@ class AppTheme {
     ),
     chipTheme: ChipThemeData(
       backgroundColor: background,
-      selectedColor: primary.withOpacity(0.12),
+      selectedColor: primary.withValues(alpha: 0.12),
       labelStyle: GoogleFonts.lato(fontSize: 13, fontWeight: FontWeight.w500),
       side: const BorderSide(color: divider),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

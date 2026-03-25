@@ -253,7 +253,7 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
           border: Border.all(color: AppTheme.divider),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.primary.withOpacity(0.06),
+              color: AppTheme.primary.withValues(alpha: 0.06),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -272,7 +272,7 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      color: AppTheme.primary.withOpacity(0.1),
+                      color: AppTheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(label,

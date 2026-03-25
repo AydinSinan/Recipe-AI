@@ -213,7 +213,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   borderRadius: BorderRadius.circular(36),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.primary.withOpacity(0.4),
+                      color: AppTheme.primary.withValues(alpha: 0.4),
                       blurRadius: 32,
                       offset: const Offset(0, 12),
                     ),
@@ -277,7 +277,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: AppTheme.primary.withOpacity(0.1),
+            color: AppTheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child:
@@ -360,7 +360,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppTheme.primary.withOpacity(0.08)
+              ? AppTheme.primary.withValues(alpha: 0.08)
               : AppTheme.surfaceCard,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
@@ -473,7 +473,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             boxShadow: isSelected
                                 ? [
                                     BoxShadow(
-                                      color: AppTheme.primary.withOpacity(0.25),
+                                      color: AppTheme.primary.withValues(alpha: 0.25),
                                       blurRadius: 8,
                                       offset: const Offset(0, 2),
                                     )
@@ -534,7 +534,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   borderRadius: BorderRadius.circular(28),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFFFD700).withOpacity(0.4),
+                      color: const Color(0xFFFFD700).withValues(alpha: 0.4),
                       blurRadius: 24,
                       offset: const Offset(0, 8),
                     ),
@@ -596,10 +596,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFD700).withOpacity(0.12),
+                  color: const Color(0xFFFFD700).withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                      color: const Color(0xFFFFD700).withOpacity(0.4)),
+                      color: const Color(0xFFFFD700).withValues(alpha: 0.4)),
                 ),
                 child: Text(
                   _selectedLanguage == 'tr'
@@ -654,7 +654,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                  color: AppTheme.primary.withOpacity(0.1),
+                  color: AppTheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(28),
                 ),
                 child: const Center(
