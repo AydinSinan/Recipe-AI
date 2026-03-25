@@ -201,7 +201,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                             blurRadius: 10)
                       ],
                     ),
-                    child: Icon(Icons.shopping_cart_outlined,
+                    child: const Icon(Icons.shopping_cart_outlined,
                         color: AppTheme.secondary, size: 22),
                   ),
                 ),
@@ -419,7 +419,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child:
-                    Icon(Icons.add_rounded, color: AppTheme.primary, size: 20),
+                    const Icon(Icons.add_rounded, color: AppTheme.primary, size: 20),
               ),
             ),
           ],

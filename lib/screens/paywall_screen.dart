@@ -53,14 +53,18 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
       final success = await SubscriptionService.purchase(package);
       if (success && mounted) {
+        final navigator = Navigator.of(context);
+        final messenger = ScaffoldMessenger.of(context);
         await context.read<AppProvider>().refreshPremiumStatus();
-        Navigator.pop(context, true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('🎉 Premium\'a hoş geldiniz!'),
-            backgroundColor: AppTheme.secondary,
-          ),
-        );
+        if (mounted) {
+          navigator.pop(true);
+          messenger.showSnackBar(
+            const SnackBar(
+              content: Text('🎉 Premium\'a hoş geldiniz!'),
+              backgroundColor: AppTheme.secondary,
+            ),
+          );
+        }
       }
     } catch (e) {
       setState(() => _error = e.toString().replaceAll('Exception: ', ''));
@@ -74,8 +78,9 @@ class _PaywallScreenState extends State<PaywallScreen> {
     try {
       final success = await SubscriptionService.restorePurchases();
       if (success && mounted) {
+        final navigator = Navigator.of(context);
         await context.read<AppProvider>().refreshPremiumStatus();
-        Navigator.pop(context, true);
+        if (mounted) navigator.pop(true);
       } else if (mounted) {
         setState(() => _error = 'Geri yüklenecek satın alma bulunamadı.');
       }

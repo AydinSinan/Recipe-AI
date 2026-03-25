@@ -263,7 +263,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
                     child: Row(
                       children: [
-                        Icon(Icons.sort_rounded,
+                        const Icon(Icons.sort_rounded,
                             size: 14, color: AppTheme.primary),
                         const SizedBox(width: 6),
                         Text(
