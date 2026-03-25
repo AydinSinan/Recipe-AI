@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // Background message handler — top-level fonksiyon olmalı
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Background message: ${message.messageId}');
+debugPrint('Background message: ${message.messageId}');
 }
 
 class NotificationService {
@@ -37,9 +37,9 @@ class NotificationService {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('Bildirim izni verildi');
+debugPrint('Bildirim izni verildi');
     } else {
-      print('Bildirim izni reddedildi');
+debugPrint('Bildirim izni reddedildi');
       return;
     }
 
