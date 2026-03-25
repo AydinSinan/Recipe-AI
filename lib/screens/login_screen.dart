@@ -37,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _errorMsg = null;
     });
     final provider = context.read<AppProvider>();
+    final navigator = Navigator.of(context);
     try {
       if (_isSignUp) {
         await provider.signUpWithEmail(
@@ -44,10 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         await provider.signInWithEmail(_emailCtrl.text.trim(), _passCtrl.text);
       }
-      // Başarılı giriş → ana sayfaya git
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/home');
-      }
+      if (mounted) navigator.pushReplacementNamed('/home');
     } catch (e) {
       setState(() => _errorMsg = e.toString().replaceAll('Exception: ', ''));
     } finally {
@@ -121,10 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? 'Google ile Devam Et'
                       : 'Continue with Google',
                   onTap: () async {
+                    final navigator = Navigator.of(context);
                     await context.read<AppProvider>().signInWithGoogle();
-                    if (mounted) {
-                      Navigator.of(context).pushReplacementNamed('/home');
-                    }
+                    if (mounted) navigator.pushReplacementNamed('/home');
                   },
                 ),
                 const SizedBox(height: 12),
@@ -161,10 +158,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 // ── Anonim giriş ─────────────────────────────────────────
                 GestureDetector(
                   onTap: () async {
+                    final navigator = Navigator.of(context);
                     await context.read<AppProvider>().signInAnonymously();
-                    if (mounted) {
-                      Navigator.of(context).pushReplacementNamed('/home');
-                    }
+                    if (mounted) navigator.pushReplacementNamed('/home');
                   },
                   child: Text(
                     lang == 'tr'
@@ -253,13 +249,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               _errorMsg = 'Lütfen e-posta adresinizi girin');
                           return;
                         }
+                        final messenger = ScaffoldMessenger.of(context);
                         try {
                           await context
                               .read<AppProvider>()
                               .resetPassword(_emailCtrl.text.trim());
                           if (mounted) {
                             setState(() => _errorMsg = null);
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            messenger.showSnackBar(
                               const SnackBar(
                                   content:
                                       Text('Şifre sıfırlama maili gönderildi')),
