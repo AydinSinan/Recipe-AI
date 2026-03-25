@@ -66,6 +66,7 @@ async function verifyAuth(req, res) {
 // ── generateRecipes endpoint ──────────────────────────────────────────────
 exports.generateRecipes = functions
   .region("europe-west1")
+  .runWith({ secrets: ["ANTHROPIC_KEY"] })
   .https.onRequest(async (req, res) => {
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -101,6 +102,7 @@ exports.generateRecipes = functions
 // ── getCalories endpoint ──────────────────────────────────────────────────
 exports.getCalories = functions
   .region("europe-west1")
+  .runWith({ secrets: ["ANTHROPIC_KEY"] })
   .https.onRequest(async (req, res) => {
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
