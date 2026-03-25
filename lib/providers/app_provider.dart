@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // kIsWeb
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -245,14 +244,16 @@ class AppProvider extends ChangeNotifier {
     final alreadyAdded = _groceryList.any((i) => i.recipeId == recipe.id);
     if (alreadyAdded) return false;
 
-    final newItems = recipe.ingredients.map((ing) => GroceryItem(
-      id: '${recipe.id}_${ing.name}',
-      name: ing.name,
-      amount: ing.amount,
-      unit: ing.unit,
-      recipeId: recipe.id,
-      recipeName: recipe.name,
-    )).toList();
+    final newItems = recipe.ingredients
+        .map((ing) => GroceryItem(
+              id: '${recipe.id}_${ing.name}',
+              name: ing.name,
+              amount: ing.amount,
+              unit: ing.unit,
+              recipeId: recipe.id,
+              recipeName: recipe.name,
+            ))
+        .toList();
 
     _groceryList.addAll(newItems);
     await _storage.saveGroceryList(_groceryList);

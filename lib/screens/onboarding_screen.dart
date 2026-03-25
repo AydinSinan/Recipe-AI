@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -84,7 +83,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboarding_done', true);
 
+    if (!mounted) return;
     final provider = context.read<AppProvider>();
+    final navigator = Navigator.of(context);
+
     await provider.setLanguage(_selectedLanguage);
 
     // Seçilen mutfakları kaydet
@@ -92,9 +94,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       provider.toggleCuisine(cuisine);
     }
 
-    if (mounted) {
-      Navigator.of(context).pushReplacementNamed('/login');
-    }
+    if (mounted) navigator.pushReplacementNamed('/login');
   }
 
   @override
@@ -388,15 +388,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             ),
             const Spacer(),
             if (isSelected)
-              Container(
-                width: 28,
-                height: 28,
+              const DecoratedBox(
                 decoration: BoxDecoration(
                   color: AppTheme.primary,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.check_rounded,
-                    color: Colors.white, size: 18),
+                child: SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: Icon(Icons.check_rounded,
+                      color: Colors.white, size: 18),
+                ),
               ),
           ],
         ),

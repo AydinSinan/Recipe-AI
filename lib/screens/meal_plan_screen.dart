@@ -5,7 +5,6 @@ import '../models/models.dart';
 import '../providers/app_provider.dart';
 import '../theme.dart';
 import '../l10n/strings.dart';
-import '../widgets/widgets.dart';
 import 'recipe_detail_screen.dart';
 
 class MealPlanScreen extends StatefulWidget {
@@ -26,10 +25,8 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
 
     // Build week days starting Monday
     final now = DateTime.now();
-    final weekStart =
-        now.subtract(Duration(days: now.weekday - 1));
-    final weekDays =
-        List.generate(7, (i) => weekStart.add(Duration(days: i)));
+    final weekStart = now.subtract(Duration(days: now.weekday - 1));
+    final weekDays = List.generate(7, (i) => weekStart.add(Duration(days: i)));
 
     final selectedKey =
         '${_selectedDay.year}-${_selectedDay.month.toString().padLeft(2, '0')}-${_selectedDay.day.toString().padLeft(2, '0')}';
@@ -49,16 +46,14 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
           // ── Week Strip ────────────────────────────────────────────────
           Container(
             color: AppTheme.surfaceCard,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: Row(
               children: weekDays.asMap().entries.map((entry) {
                 final i = entry.key;
                 final day = entry.value;
                 final isSelected = day.day == _selectedDay.day &&
                     day.month == _selectedDay.month;
-                final isToday = day.day == now.day &&
-                    day.month == now.month;
+                final isToday = day.day == now.day && day.month == now.month;
                 final dayKey =
                     '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
                 final hasMeals = plan?.days[dayKey] != null;
@@ -72,9 +67,8 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 4),
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppTheme.primary
-                            : Colors.transparent,
+                        color:
+                            isSelected ? AppTheme.primary : Colors.transparent,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Column(
@@ -123,10 +117,8 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
           // ── Daily Total ───────────────────────────────────────────────
           if (dayMeals != null && dayMeals.totalCalories > 0)
             Container(
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 18, vertical: 12),
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
               decoration: BoxDecoration(
                 gradient: AppTheme.warmGradient,
                 borderRadius: BorderRadius.circular(14),
@@ -204,8 +196,7 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
         decoration: BoxDecoration(
           color: AppTheme.surfaceCard,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-              color: AppTheme.divider, style: BorderStyle.solid),
+          border: Border.all(color: AppTheme.divider, style: BorderStyle.solid),
         ),
         child: Row(
           children: [
@@ -242,8 +233,7 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (_) => RecipeDetailScreen(recipe: recipe)),
+        MaterialPageRoute(builder: (_) => RecipeDetailScreen(recipe: recipe)),
       ),
       child: Container(
         padding: const EdgeInsets.all(18),
@@ -261,16 +251,15 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
         ),
         child: Row(
           children: [
-            Text(recipe.cultureFlag,
-                style: const TextStyle(fontSize: 32)),
+            Text(recipe.cultureFlag, style: const TextStyle(fontSize: 32)),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 3),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: AppTheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(6),
@@ -294,8 +283,7 @@ class _MealPlanScreenState extends State<MealPlanScreen> {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right_rounded,
-                color: AppTheme.textHint),
+            const Icon(Icons.chevron_right_rounded, color: AppTheme.textHint),
           ],
         ),
       ),
