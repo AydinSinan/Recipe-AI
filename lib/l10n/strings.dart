@@ -91,6 +91,17 @@ class AppStrings {
       'share_whatsapp': 'WhatsApp\'ta Paylaş',
       'share_not_available': 'WhatsApp bu cihazda bulunamadı',
 
+      // Grocery List
+      'grocery_list': 'Alışveriş Listesi',
+      'grocery_add': 'Listeye Ekle',
+      'grocery_added': 'Listeye eklendi!',
+      'grocery_already_added': 'Zaten listede',
+      'grocery_empty': 'Alışveriş listeniz boş.\nTarif detayından malzemeleri ekleyin.',
+      'grocery_clear_all': 'Listeyi Temizle',
+      'grocery_clear_confirm': 'Tüm liste silinsin mi?',
+      'grocery_items_count': 'ürün',
+      'grocery_checked_count': 'tamamlandı',
+
       // Dietary Filters
       'dietary_filters': 'Diyet Tercihleri',
       'dietary_filter_vegetarian': 'Vejeteryan',
@@ -191,6 +202,17 @@ class AppStrings {
       // Sharing
       'share_whatsapp': 'Share on WhatsApp',
       'share_not_available': 'WhatsApp not found on this device',
+
+      // Grocery List
+      'grocery_list': 'Grocery List',
+      'grocery_add': 'Add to List',
+      'grocery_added': 'Added to grocery list!',
+      'grocery_already_added': 'Already in list',
+      'grocery_empty': 'Your grocery list is empty.\nAdd ingredients from a recipe.',
+      'grocery_clear_all': 'Clear List',
+      'grocery_clear_confirm': 'Clear the entire list?',
+      'grocery_items_count': 'items',
+      'grocery_checked_count': 'done',
 
       // Dietary Filters
       'dietary_filters': 'Dietary Preferences',
