@@ -10,6 +10,7 @@ class ClaudeService {
     required List<String> ingredients,
     required String language,
     required List<String> selectedCuisines,
+    required List<String> selectedDietaryFilters,
     required bool isPremium,
   }) async {
     final count = isPremium
@@ -26,6 +27,9 @@ class ClaudeService {
     final cuisineList = selectedCuisines.isEmpty
         ? 'any world cuisine'
         : selectedCuisines.join(', ');
+    final dietaryList = selectedDietaryFilters.isEmpty
+        ? 'none'
+        : selectedDietaryFilters.join(', ');
 
     final prompt = '''
 You are an expert international chef and nutritionist.
@@ -36,6 +40,7 @@ Do NOT use any other language. This is mandatory.
 
 Ingredients available: $ingList
 Requested cuisine styles: $cuisineList
+Dietary restrictions (MUST be strictly followed): $dietaryList
 
 Generate exactly $count recipes. Respond ONLY with valid JSON, no markdown, no explanation.
 
@@ -65,6 +70,7 @@ Rules:
 - difficulty must be exactly "easy", "medium", or "hard" (always in English, never translate)
 - calories are per serving
 - ALL other text fields must be in $lang — no exceptions
+- If dietary restrictions are specified, every recipe MUST comply with ALL of them — no exceptions
 ''';
 
     final response = await _callApi(

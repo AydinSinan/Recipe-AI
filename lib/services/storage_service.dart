@@ -8,6 +8,7 @@ class StorageService {
   static const String _langKey = 'language';
   static const String _apiKeyKey = 'api_key';
   static const String _recentSearchesKey = 'recent_searches';
+  static const String _dietaryFiltersKey = 'dietary_filters';
 
   // ── Favorites ────────────────────────────────────────────────────────────
   Future<List<Recipe>> getFavorites() async {
@@ -119,5 +120,16 @@ class StorageService {
       _recentSearchesKey,
       current.take(10).toList(),
     );
+  }
+
+  // ── Dietary Filters ───────────────────────────────────────────────────────
+  Future<List<String>> getDietaryFilters() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList(_dietaryFiltersKey) ?? [];
+  }
+
+  Future<void> saveDietaryFilters(List<String> filters) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_dietaryFiltersKey, filters);
   }
 }

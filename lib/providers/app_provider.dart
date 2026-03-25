@@ -27,6 +27,7 @@ class AppProvider extends ChangeNotifier {
   List<Recipe> _recipes = [];
   List<Recipe> _favorites = [];
   List<String> _selectedCuisines = [];
+  List<String> _selectedDietaryFilters = [];
   Map<String, int> _calorieMap = {};
   MealPlan? _mealPlan;
   String? _errorMessage;
@@ -49,6 +50,7 @@ class AppProvider extends ChangeNotifier {
   List<Recipe> get recipes => _recipes;
   List<Recipe> get favorites => _favorites;
   List<String> get selectedCuisines => _selectedCuisines;
+  List<String> get selectedDietaryFilters => _selectedDietaryFilters;
   Map<String, int> get calorieMap => _calorieMap;
   MealPlan? get mealPlan => _mealPlan;
   String? get errorMessage => _errorMessage;
@@ -94,6 +96,7 @@ class AppProvider extends ChangeNotifier {
 
     _favorites = await _storage.getFavorites();
     _mealPlan = await _storage.getMealPlan();
+    _selectedDietaryFilters = await _storage.getDietaryFilters();
 
     final today = DateTime.now().toIso8601String().substring(0, 10);
     final lastDate = _userData?['dailySearchDate'] ?? '';
@@ -214,6 +217,23 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ── Dietary Filters ───────────────────────────────────────────────────────
+  Future<void> toggleDietaryFilter(String filter) async {
+    if (_selectedDietaryFilters.contains(filter)) {
+      _selectedDietaryFilters.remove(filter);
+    } else {
+      _selectedDietaryFilters.add(filter);
+    }
+    await _storage.saveDietaryFilters(_selectedDietaryFilters);
+    notifyListeners();
+  }
+
+  Future<void> clearDietaryFilters() async {
+    _selectedDietaryFilters = [];
+    await _storage.saveDietaryFilters(_selectedDietaryFilters);
+    notifyListeners();
+  }
+
   // ── Search (public — limit kontrolü yapar) ────────────────────────────────
   Future<void> searchRecipes(List<String> ingredients) async {
     if (_user == null) return;
@@ -247,6 +267,7 @@ class AppProvider extends ChangeNotifier {
           ingredients: ingredients,
           language: _language,
           selectedCuisines: _selectedCuisines,
+          selectedDietaryFilters: _selectedDietaryFilters,
           isPremium: _isPremium,
         ),
         _claude.getIngredientCalories(

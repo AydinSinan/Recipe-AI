@@ -90,6 +90,16 @@ class AppStrings {
       // Sharing
       'share_whatsapp': 'WhatsApp\'ta Paylaş',
       'share_not_available': 'WhatsApp bu cihazda bulunamadı',
+
+      // Dietary Filters
+      'dietary_filters': 'Diyet Tercihleri',
+      'dietary_filter_vegetarian': 'Vejeteryan',
+      'dietary_filter_vegan': 'Vegan',
+      'dietary_filter_gluten_free': 'Glutensiz',
+      'dietary_filter_dairy_free': 'Sütsüz',
+      'dietary_filter_nut_free': 'Fındıksız',
+      'dietary_filter_low_carb': 'Düşük Karbonhidrat',
+      'dietary_no_restriction': 'Kısıtlama yok',
     },
     'en': {
       // General
@@ -181,6 +191,16 @@ class AppStrings {
       // Sharing
       'share_whatsapp': 'Share on WhatsApp',
       'share_not_available': 'WhatsApp not found on this device',
+
+      // Dietary Filters
+      'dietary_filters': 'Dietary Preferences',
+      'dietary_filter_vegetarian': 'Vegetarian',
+      'dietary_filter_vegan': 'Vegan',
+      'dietary_filter_gluten_free': 'Gluten-Free',
+      'dietary_filter_dairy_free': 'Dairy-Free',
+      'dietary_filter_nut_free': 'Nut-Free',
+      'dietary_filter_low_carb': 'Low Carb',
+      'dietary_no_restriction': 'No restrictions',
     },
   };
 

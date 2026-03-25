@@ -21,6 +21,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _fadeCtrl;
   late Animation<double> _fadeAnim;
 
+  // Dietary filter data: {name_tr, name_en, icon, key}
+  static const List<Map<String, String>> _dietaryFilters = [
+    {'tr': 'Vejeteryan', 'en': 'Vegetarian', 'icon': '🥗', 'key': 'vegetarian'},
+    {'tr': 'Vegan', 'en': 'Vegan', 'icon': '🌱', 'key': 'vegan'},
+    {'tr': 'Glutensiz', 'en': 'Gluten-Free', 'icon': '🌾', 'key': 'gluten-free'},
+    {'tr': 'Sütsüz', 'en': 'Dairy-Free', 'icon': '🥛', 'key': 'dairy-free'},
+    {'tr': 'Fındıksız', 'en': 'Nut-Free', 'icon': '🥜', 'key': 'nut-free'},
+    {'tr': 'Düşük Karb', 'en': 'Low Carb', 'icon': '📉', 'key': 'low-carb'},
+  ];
+
   // Cuisine data: {name_tr, name_en, flag, key}
   static const List<Map<String, String>> _cuisines = [
     {'tr': 'Akdeniz', 'en': 'Mediterranean', 'flag': '🌊', 'key': 'Mediterranean'},
@@ -268,6 +278,103 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     fontStyle: FontStyle.italic),
                               ),
                             ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // ── Dietary Filter Selector ───────────────────────────────
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 18, 24, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                AppStrings.get('dietary_filters', lang),
+                                style: GoogleFonts.lato(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.textSecondary,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const Spacer(),
+                              if (provider.selectedDietaryFilters.isNotEmpty)
+                                GestureDetector(
+                                  onTap: provider.clearDietaryFilters,
+                                  child: Text(
+                                    lang == 'tr' ? 'Temizle' : 'Clear',
+                                    style: GoogleFonts.lato(
+                                      fontSize: 12,
+                                      color: AppTheme.secondary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: _dietaryFilters.map((f) {
+                              final key = f['key']!;
+                              final isSelected =
+                                  provider.selectedDietaryFilters.contains(key);
+                              return GestureDetector(
+                                onTap: () =>
+                                    provider.toggleDietaryFilter(key),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? AppTheme.secondary
+                                        : AppTheme.surfaceCard,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? AppTheme.secondary
+                                          : AppTheme.divider,
+                                    ),
+                                    boxShadow: isSelected
+                                        ? [
+                                            BoxShadow(
+                                              color: AppTheme.secondary
+                                                  .withValues(alpha: 0.25),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 2),
+                                            )
+                                          ]
+                                        : [],
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(f['icon']!,
+                                          style:
+                                              const TextStyle(fontSize: 15)),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        lang == 'tr' ? f['tr']! : f['en']!,
+                                        style: GoogleFonts.lato(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: isSelected
+                                              ? Colors.white
+                                              : AppTheme.textPrimary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ],
                       ),
                     ),
