@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="notification_color">#E8845A</color>
+    <color name="splash_background">#FDF6EE</color>
 </resources>
