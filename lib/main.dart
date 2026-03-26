@@ -36,7 +36,7 @@ void main() async {
   if (!kIsWeb) {
     await SubscriptionService.initialize();
     await NotificationService.initialize();
-    await NotificationService.subscribeToDefaultTopics();
+    await NotificationService.subscribeToLanguageTopics('tr');
   }
 
   // Onboarding daha önce tamamlandı mı?

@@ -138,22 +138,30 @@ debugPrint('Bildirim izni reddedildi');
     await _messaging.unsubscribeFromTopic(topic);
   }
 
-  // Varsayılan konulara abone ol
-  static Future<void> subscribeToDefaultTopics() async {
+  // Dile göre konulara abone ol (diğer dilden çık)
+  static Future<void> subscribeToLanguageTopics(String lang) async {
     if (kIsWeb) return;
-    await subscribeToTopic('daily_recipe');      // Günlük yemek önerisi
-    await subscribeToTopic('new_features');      // Yeni özellik duyurusu
-    await subscribeToTopic('weekly_meal_plan');  // Haftalık plan hatırlatması
+    if (lang == 'tr') {
+      await subscribeToTopic('daily_recipe_tr');
+      await subscribeToTopic('weekly_plan_tr');
+      await unsubscribeFromTopic('daily_recipe_en');
+      await unsubscribeFromTopic('weekly_plan_en');
+    } else {
+      await subscribeToTopic('daily_recipe_en');
+      await subscribeToTopic('weekly_plan_en');
+      await unsubscribeFromTopic('daily_recipe_tr');
+      await unsubscribeFromTopic('weekly_plan_tr');
+    }
   }
 
-  // Premium teklifi bildirimi (premium olmayanlar için)
-  static Future<void> subscribeToPremiumOffers() async {
+  // Premium kullanıcı konusu
+  static Future<void> subscribeToPremiumTopic() async {
     if (kIsWeb) return;
-    await subscribeToTopic('premium_offers');
+    await subscribeToTopic('premium_users');
   }
 
-  static Future<void> unsubscribeFromPremiumOffers() async {
+  static Future<void> unsubscribeFromPremiumTopic() async {
     if (kIsWeb) return;
-    await unsubscribeFromTopic('premium_offers');
+    await unsubscribeFromTopic('premium_users');
   }
 }

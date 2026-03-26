@@ -9,9 +9,9 @@ class SubscriptionConfig {
   static const String revenueCatGoogleKey = 'test_HOwPnWRDfCVqFjMfievjhGZewzF';
 
   // Fiyatlar (RevenueCat'ten dinamik gelir ama fallback için)
-  static const String monthlyPrice = '₺99';
-  static const String yearlyPrice = '₺599';
-  static const String yearlySaving = '%50';
+  static const String monthlyPrice = '₺79';
+  static const String yearlyPrice = '₺568';
+  static const String yearlySaving = '%40';
 
   // Free tier limits
   static const int freeSearchesPerDay = 5;

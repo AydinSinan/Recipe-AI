@@ -6,6 +6,7 @@ import '../services/claude_service.dart';
 import '../services/auth_service.dart';
 import '../services/storage_service.dart';
 import '../services/subscription_service.dart';
+import '../services/notification_service.dart';
 import '../config/config.dart';
 
 enum RecipeState { idle, loading, success, error }
@@ -89,6 +90,11 @@ class AppProvider extends ChangeNotifier {
       if (!user.isAnonymous) {
         await SubscriptionService.loginUser(user.uid);
       }
+      if (_isPremium) {
+        await NotificationService.subscribeToPremiumTopic();
+      } else {
+        await NotificationService.unsubscribeFromPremiumTopic();
+      }
     } else {
       _isPremium = false;
     }
@@ -97,6 +103,8 @@ class AppProvider extends ChangeNotifier {
       _userData = await _authService.getUserData();
       _language = _userData?['language'] ?? 'tr';
     }
+
+    await NotificationService.subscribeToLanguageTopics(_language);
 
     _favorites = await _storage.getFavorites();
     _mealPlan = await _storage.getMealPlan();
@@ -184,6 +192,7 @@ class AppProvider extends ChangeNotifier {
           .update({'language': lang});
     }
 
+    await NotificationService.subscribeToLanguageTopics(lang);
     notifyListeners();
 
     // Tarif yüklüyse aynı malzemelerle yeni dilde yeniden çek (sayaç artmaz)
@@ -451,6 +460,11 @@ class AppProvider extends ChangeNotifier {
   Future<void> refreshPremiumStatus() async {
     if (!kIsWeb) {
       _isPremium = await SubscriptionService.isPremium();
+      if (_isPremium) {
+        await NotificationService.subscribeToPremiumTopic();
+      } else {
+        await NotificationService.unsubscribeFromPremiumTopic();
+      }
     }
     notifyListeners();
   }

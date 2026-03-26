@@ -1,4 +1,5 @@
 const { onRequest } = require("firebase-functions/v2/https");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { defineSecret } = require("firebase-functions/params");
 const admin = require("firebase-admin");
 const https = require("https");
@@ -65,6 +66,105 @@ async function verifyAuth(req, res) {
     return null;
   }
 }
+
+// ── FCM Topic Sender ──────────────────────────────────────────────────────
+async function sendToTopic(topic, title, body) {
+  await admin.messaging().send({
+    topic,
+    notification: { title, body },
+    android: {
+      notification: {
+        channelId: "recipeai_channel",
+        icon: "ic_launcher",
+        sound: "default",
+      },
+    },
+    apns: {
+      payload: { aps: { badge: 1, sound: "default" } },
+    },
+  });
+}
+
+// ── Günlük Tarif Bildirimi — Her gün 09:00 Türkiye ────────────────────────
+exports.dailyRecipeNotification = onSchedule(
+  { schedule: "0 9 * * *", timeZone: "Europe/Istanbul", region: "europe-west1" },
+  async () => {
+    await Promise.all([
+      sendToTopic(
+        "daily_recipe_tr",
+        "🍳 Bugün ne pişirelim?",
+        "Elindeki malzemelerle harika tarifler seni bekliyor!"
+      ),
+      sendToTopic(
+        "daily_recipe_en",
+        "🍳 What to cook today?",
+        "Amazing recipes with your ingredients are waiting!"
+      ),
+    ]);
+    console.log("Günlük tarif bildirimi gönderildi.");
+  }
+);
+
+// ── Haftalık Plan Hatırlatıcısı — Her Pazar 18:00 Türkiye ─────────────────
+exports.weeklyMealPlanReminder = onSchedule(
+  { schedule: "0 18 * * 0", timeZone: "Europe/Istanbul", region: "europe-west1" },
+  async () => {
+    await Promise.all([
+      sendToTopic(
+        "weekly_plan_tr",
+        "📅 Bu haftanı planladın mı?",
+        "Haftalık yemek planını oluştur, alışveriş listeni hazırla!"
+      ),
+      sendToTopic(
+        "weekly_plan_en",
+        "📅 Did you plan your week?",
+        "Create your weekly meal plan and grocery list!"
+      ),
+    ]);
+    console.log("Haftalık plan hatırlatıcısı gönderildi.");
+  }
+);
+
+// ── Yeniden Katılım — Her gün 11:00 Türkiye (3 gün açmayanlara) ───────────
+exports.reEngagementNotification = onSchedule(
+  { schedule: "0 11 * * *", timeZone: "Europe/Istanbul", region: "europe-west1" },
+  async () => {
+    const db = admin.firestore();
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+
+    const snapshot = await db
+      .collection("users")
+      .where("lastLoginAt", "<=", threeDaysAgo)
+      .where("isPremium", "==", true)
+      .get();
+
+    if (snapshot.empty) return;
+
+    const tokens = snapshot.docs
+      .map((doc) => doc.data().fcmToken)
+      .filter(Boolean);
+
+    if (tokens.length === 0) return;
+
+    // 500'lük gruplara böl (FCM limiti)
+    for (let i = 0; i < tokens.length; i += 500) {
+      const chunk = tokens.slice(i, i + 500);
+      await admin.messaging().sendEachForMulticast({
+        tokens: chunk,
+        notification: {
+          title: "🌮 Seni özledik!",
+          body: "Bugün ne pişireceğini bulmana yardım edelim.",
+        },
+        android: {
+          notification: { channelId: "recipeai_channel", icon: "ic_launcher" },
+        },
+        apns: { payload: { aps: { badge: 1 } } },
+      });
+    }
+    console.log(`Yeniden katılım bildirimi ${tokens.length} kullanıcıya gönderildi.`);
+  }
+);
 
 // ── generateRecipes endpoint ──────────────────────────────────────────────
 exports.generateRecipes = onRequest(
