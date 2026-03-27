@@ -404,7 +404,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Text(AppStrings.get('app_name', lang),
                         style: GoogleFonts.playfairDisplay(
                             fontWeight: FontWeight.w700, fontSize: 16)),
-                    Text('Version 1.0.0 • Powered by Claude AI',
+                    Text('Version 1.0.0 • Powered by AI',
                         style: GoogleFonts.lato(
                             fontSize: 12, color: AppTheme.textHint)),
                   ],

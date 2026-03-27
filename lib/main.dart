@@ -14,13 +14,16 @@ import 'screens/login_screen.dart';
 import 'screens/paywall_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/upgrade_sheet.dart';
+import 'screens/splash_screen.dart';
 import 'services/subscription_service.dart';
 import 'services/notification_service.dart';
 import 'theme.dart';
 import 'l10n/strings.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -43,6 +46,8 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final onboardingDone = prefs.getBool('onboarding_done') ?? false;
 
+  FlutterNativeSplash.remove();
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => AppProvider()..initialize(),
@@ -61,13 +66,44 @@ class RecipeAIApp extends StatelessWidget {
       title: 'RecipeAI',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      home: showOnboarding ? const OnboardingScreen() : const AuthGate(),
+      home: AppSplash(showOnboarding: showOnboarding),
       routes: {
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const AuthGate(),
       },
     );
   }
+}
+
+// ── App Splash — animasyon biter, sonra AuthGate/Onboarding'e geç ────────────
+class AppSplash extends StatefulWidget {
+  final bool showOnboarding;
+  const AppSplash({super.key, required this.showOnboarding});
+
+  @override
+  State<AppSplash> createState() => _AppSplashState();
+}
+
+class _AppSplashState extends State<AppSplash> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) =>
+              widget.showOnboarding ? const OnboardingScreen() : const AuthGate(),
+          transitionsBuilder: (_, anim, __, child) =>
+              FadeTransition(opacity: anim, child: child),
+          transitionDuration: const Duration(milliseconds: 400),
+        ),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => const SplashScreen();
 }
 
 // ── Auth Gate ─────────────────────────────────────────────────────────────────
@@ -79,21 +115,7 @@ class AuthGate extends StatelessWidget {
     final provider = context.watch<AppProvider>();
 
     if (provider.isAuthLoading) {
-      return const Scaffold(
-        backgroundColor: AppTheme.background,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('🍳', style: TextStyle(fontSize: 56)),
-              SizedBox(height: 20),
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
-              ),
-            ],
-          ),
-        ),
-      );
+      return const Scaffold(backgroundColor: AppTheme.background);
     }
 
     if (!provider.isLoggedIn) {

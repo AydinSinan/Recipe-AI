@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "269688618988",
+    "project_id": "recipeai-7429a",
+    "storage_bucket": "recipeai-7429a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269688618988:android:bbef3bf25dccdffae58ac9",
+        "android_client_info": {
+          "package_name": "com.snnydn.recipeai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269688618988-c0l6tetoda8957b7kb2ghgmd4s21c0j6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.snnydn.recipeai",
+            "certificate_hash": "209f70a67d173e580c03ae77be33228203919765"
+          }
+        },
+        {
+          "client_id": "269688618988-eiajvukfe9q02he8r1qhaalqehg35m7n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjYJMy6uJOrXY0L2AsUEZnBYXSgZBC-cQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269688618988-eiajvukfe9q02he8r1qhaalqehg35m7n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "269688618988-qoajn0u90pgh6tr1unj20vnqlju9115j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.snnydn.recipeai"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

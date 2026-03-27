@@ -168,7 +168,7 @@ exports.reEngagementNotification = onSchedule(
 
 // ── generateRecipes endpoint ──────────────────────────────────────────────
 exports.generateRecipes = onRequest(
-  { region: "europe-west1", secrets: [anthropicKey] },
+  { region: "europe-west1", secrets: [anthropicKey], invoker: "public" },
   async (req, res) => {
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -194,7 +194,7 @@ exports.generateRecipes = onRequest(
 
 // ── getCalories endpoint ──────────────────────────────────────────────────
 exports.getCalories = onRequest(
-  { region: "europe-west1", secrets: [anthropicKey] },
+  { region: "europe-west1", secrets: [anthropicKey], invoker: "public" },
   async (req, res) => {
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");

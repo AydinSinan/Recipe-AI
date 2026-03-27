@@ -161,7 +161,7 @@ Expected format:
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) throw Exception('Giriş yapılmamış');
 
-    final token = await user.getIdToken();
+    final token = await user.getIdToken(true); // force refresh
 
     final res = await http.post(
       Uri.parse('${ApiConfig.functionsBaseUrl}/$endpoint'),
@@ -172,7 +172,7 @@ Expected format:
       body: jsonEncode({'prompt': prompt}),
     ).timeout(const Duration(seconds: 60));
 
-    if (res.statusCode == 401) throw Exception('Yetkilendirme hatası');
+    if (res.statusCode == 401) throw Exception('Yetkilendirme hatası: ${res.body}');
     if (res.statusCode == 429) throw Exception('Günlük arama limitine ulaştınız');
     if (res.statusCode != 200) throw Exception('Sunucu hatası: ${res.statusCode}');
 
