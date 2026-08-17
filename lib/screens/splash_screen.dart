@@ -124,7 +124,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 color: AppTheme.primary.withValues(alpha: 0.4),
                               ),
                               const SizedBox(width: 10),
-                              Text(
+                              const Text(
                                 'AI destekli tarif asistanın',
                                 style: TextStyle(
                                   fontSize: 13,
