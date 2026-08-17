@@ -18,7 +18,6 @@ class _PaywallScreenState extends State<PaywallScreen> {
   Offerings? _offerings;
   bool _isLoading = true;
   bool _isPurchasing = false;
-  bool _isYearly = true; // default yearly
   String? _error;
 
   @override
@@ -45,9 +44,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
       final offering = _offerings!.current;
       if (offering == null) throw Exception('Ürün bulunamadı');
 
-      final package = _isYearly
-          ? offering.annual
-          : offering.monthly;
+      final package = offering.monthly;
 
       if (package == null) throw Exception('Paket bulunamadı');
 
@@ -150,7 +147,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   // ── Features ──────────────────────────────────────────────
                   _featureRow('🔍',
                       lang == 'tr' ? 'Sınırsız günlük arama' : 'Unlimited daily searches',
-                      lang == 'tr' ? 'Free: 5/gün' : 'Free: 5/day'),
+                      lang == 'tr' ? 'Free: 1/gün' : 'Free: 1/day'),
                   _featureRow('🌍',
                       lang == 'tr' ? 'Tüm dünya mutfakları' : 'All world cuisines',
                       lang == 'tr' ? 'Free: 2 mutfak' : 'Free: 2 cuisines'),
@@ -169,28 +166,30 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
                   const SizedBox(height: 24),
 
-                  // ── Plan Toggle ───────────────────────────────────────────
+                  // ── Plan ──────────────────────────────────────────────────
                   Container(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppTheme.divider,
+                      color: AppTheme.surfaceCard,
                       borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.06),
+                            blurRadius: 8)
+                      ],
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _planToggle(
-                          label: lang == 'tr' ? 'Aylık' : 'Monthly',
-                          sublabel: '₺99',
-                          isSelected: !_isYearly,
-                          onTap: () => setState(() => _isYearly = false),
-                        ),
-                        _planToggle(
-                          label: lang == 'tr' ? 'Yıllık' : 'Yearly',
-                          sublabel: '₺599 (%50 indirim)',
-                          isSelected: _isYearly,
-                          onTap: () => setState(() => _isYearly = true),
-                          badge: '%50',
-                        ),
+                        Text(lang == 'tr' ? 'Aylık' : 'Monthly',
+                            style: GoogleFonts.lato(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                                color: AppTheme.primary)),
+                        const SizedBox(width: 8),
+                        Text('₺99',
+                            style: GoogleFonts.lato(
+                                fontSize: 13, color: AppTheme.textHint)),
                       ],
                     ),
                   ),
@@ -221,13 +220,9 @@ class _PaywallScreenState extends State<PaywallScreen> {
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Colors.white)))
                           : Text(
-                              _isYearly
-                                  ? (lang == 'tr'
-                                      ? 'Yıllık Planı Başlat — ₺599/yıl'
-                                      : 'Start Yearly — ₺599/year')
-                                  : (lang == 'tr'
-                                      ? 'Aylık Planı Başlat — ₺99/ay'
-                                      : 'Start Monthly — ₺99/month'),
+                              lang == 'tr'
+                                  ? 'Aylık Planı Başlat — ₺99/ay'
+                                  : 'Start Monthly — ₺99/month',
                               style: GoogleFonts.lato(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700),
@@ -292,69 +287,6 @@ class _PaywallScreenState extends State<PaywallScreen> {
             const Icon(Icons.check_circle_rounded,
                 color: AppTheme.secondary, size: 22),
           ],
-        ),
-      );
-
-  Widget _planToggle({
-    required String label,
-    required String sublabel,
-    required bool isSelected,
-    required VoidCallback onTap,
-    String? badge,
-  }) =>
-      Expanded(
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: isSelected ? AppTheme.surfaceCard : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: isSelected
-                  ? [
-                      BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.06),
-                          blurRadius: 8)
-                    ]
-                  : [],
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(label,
-                        style: GoogleFonts.lato(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15,
-                            color: isSelected
-                                ? AppTheme.primary
-                                : AppTheme.textSecondary)),
-                    if (badge != null) ...[
-                      const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: AppTheme.secondary,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(badge,
-                            style: GoogleFonts.lato(
-                                fontSize: 10,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700)),
-                      ),
-                    ],
-                  ],
-                ),
-                Text(sublabel,
-                    style: GoogleFonts.lato(
-                        fontSize: 11, color: AppTheme.textHint)),
-              ],
-            ),
-          ),
         ),
       );
 }

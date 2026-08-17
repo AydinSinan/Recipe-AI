@@ -8,6 +8,13 @@ admin.initializeApp();
 
 const anthropicKey = defineSecret("ANTHROPIC_KEY");
 
+// ── CORS ────────────────────────────────────────────────────────────────
+function setCors(res) {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+}
+
 // ── Anthropic API çağrısı ──────────────────────────────────────────────────
 async function callAnthropic(prompt, apiKey) {
   const body = JSON.stringify({
@@ -170,9 +177,7 @@ exports.reEngagementNotification = onSchedule(
 exports.generateRecipes = onRequest(
   { region: "europe-west1", secrets: [anthropicKey], invoker: "public" },
   async (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
+    setCors(res);
     if (req.method === "OPTIONS") return res.status(204).send("");
     if (req.method !== "POST") return res.status(405).json({ error: "Sadece POST desteklenir" });
 
@@ -196,9 +201,7 @@ exports.generateRecipes = onRequest(
 exports.getCalories = onRequest(
   { region: "europe-west1", secrets: [anthropicKey], invoker: "public" },
   async (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
+    setCors(res);
     if (req.method === "OPTIONS") return res.status(204).send("");
     if (req.method !== "POST") return res.status(405).json({ error: "Sadece POST desteklenir" });
 

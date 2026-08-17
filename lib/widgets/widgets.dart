@@ -255,11 +255,15 @@ class RecipeCard extends StatelessWidget {
 class IngredientChip extends StatelessWidget {
   final String label;
   final VoidCallback onRemove;
+  final bool isSaved;
+  final VoidCallback? onTogglePantry;
 
   const IngredientChip({
     super.key,
     required this.label,
     required this.onRemove,
+    this.isSaved = false,
+    this.onTogglePantry,
   });
 
   @override
@@ -280,6 +284,17 @@ class IngredientChip extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: AppTheme.primary,
               )),
+          if (onTogglePantry != null) ...[
+            const SizedBox(width: 6),
+            GestureDetector(
+              onTap: onTogglePantry,
+              child: Icon(
+                isSaved ? Icons.star_rounded : Icons.star_border_rounded,
+                size: 16,
+                color: AppTheme.primary,
+              ),
+            ),
+          ],
           const SizedBox(width: 6),
           GestureDetector(
             onTap: onRemove,
@@ -287,6 +302,60 @@ class IngredientChip extends StatelessWidget {
                 size: 16, color: AppTheme.primary),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── PantryChip ───────────────────────────────────────────────────────────────
+class PantryChip extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final VoidCallback onDelete;
+
+  const PantryChip({
+    super.key,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+          color: isSelected ? AppTheme.secondary : AppTheme.surfaceCard,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? AppTheme.secondary : AppTheme.divider,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(label,
+                style: GoogleFonts.lato(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? Colors.white : AppTheme.textPrimary,
+                )),
+            const SizedBox(width: 6),
+            GestureDetector(
+              onTap: onDelete,
+              child: Icon(Icons.close_rounded,
+                  size: 15,
+                  color: isSelected
+                      ? Colors.white.withValues(alpha: 0.85)
+                      : AppTheme.textHint),
+            ),
+          ],
+        ),
       ),
     );
   }

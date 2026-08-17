@@ -604,9 +604,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       color: const Color(0xFFFFD700).withValues(alpha: 0.4)),
                 ),
                 child: Text(
-                  _selectedLanguage == 'tr'
-                      ? '₺99/ay · İlk 7 gün ücretsiz deneyin'
-                      : '\$4.99/mo · Try free for 7 days',
+                  _selectedLanguage == 'tr' ? '₺99/ay' : '₺99/month',
                   style: GoogleFonts.lato(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,

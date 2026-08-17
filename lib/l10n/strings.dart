@@ -32,6 +32,8 @@ class AppStrings {
       'generating': 'Tarifler hazırlanıyor...',
       'recent_searches': 'Son Aramalar',
       'clear_all': 'Temizle',
+      'pantry_title': 'Kilerim',
+      'pantry_empty_hint': 'Sık kullandığın malzemeleri yıldızla kaydet, tek dokunuşla ekle.',
 
       // Recipe Card
       'minutes': 'dk',
@@ -115,7 +117,7 @@ class AppStrings {
       'upgrade_subtitle': 'Arama hakkın bitti. Ücretsiz hesap açarak verilerini koru ve devam et.',
       'upgrade_benefit_1': 'Favori tariflerin korunur',
       'upgrade_benefit_2': 'Alışveriş listen kaybolmaz',
-      'upgrade_benefit_3': 'Günlük 5 arama hakkı yenilenir',
+      'upgrade_benefit_3': 'Günlük 1 arama hakkı yenilenir',
       'upgrade_google': 'Google ile Devam Et',
       'upgrade_later': 'Şimdi değil',
       'upgrade_success': 'Hesabın oluşturuldu! Tüm verilerin korundu.',
@@ -163,6 +165,8 @@ class AppStrings {
       'generating': 'Preparing recipes...',
       'recent_searches': 'Recent Searches',
       'clear_all': 'Clear All',
+      'pantry_title': 'My Pantry',
+      'pantry_empty_hint': 'Star ingredients you use often to save them here for one-tap adding.',
 
       // Recipe Card
       'minutes': 'min',
@@ -246,7 +250,7 @@ class AppStrings {
       'upgrade_subtitle': 'You\'ve used all your searches. Create a free account to keep your data and continue.',
       'upgrade_benefit_1': 'Your favorite recipes are saved',
       'upgrade_benefit_2': 'Your grocery list stays intact',
-      'upgrade_benefit_3': 'Daily 5 searches reset every day',
+      'upgrade_benefit_3': 'Daily 1 search resets every day',
       'upgrade_google': 'Continue with Google',
       'upgrade_later': 'Not now',
       'upgrade_success': 'Account created! All your data is preserved.',

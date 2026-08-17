@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart'; // kIsWeb
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,9 +31,9 @@ class AppProvider extends ChangeNotifier {
   List<String> _selectedDietaryFilters = [];
   List<GroceryItem> _groceryList = [];
   Map<String, int> _calorieMap = {};
+  List<String> _pantry = [];
   MealPlan? _mealPlan;
   String? _errorMessage;
-  List<String> _lastIngredients = []; // dil değişince yeniden aramak için
 
   // ── UI State ──────────────────────────────────────────────────────────────
   String _language = 'tr';
@@ -56,6 +57,7 @@ class AppProvider extends ChangeNotifier {
   List<GroceryItem> get groceryList => _groceryList;
   int get groceryCheckedCount => _groceryList.where((i) => i.isChecked).length;
   Map<String, int> get calorieMap => _calorieMap;
+  List<String> get pantry => _pantry;
   MealPlan? get mealPlan => _mealPlan;
   String? get errorMessage => _errorMessage;
   String get language => _language;
@@ -110,6 +112,7 @@ class AppProvider extends ChangeNotifier {
     _mealPlan = await _storage.getMealPlan();
     _selectedDietaryFilters = await _storage.getDietaryFilters();
     _groceryList = await _storage.getGroceryList();
+    _pantry = await _storage.getPantry();
 
     final today = DateTime.now().toIso8601String().substring(0, 10);
     final lastDate = _userData?['dailySearchDate'] ?? '';
@@ -175,7 +178,6 @@ class AppProvider extends ChangeNotifier {
     _recipes = [];
     _favorites = [];
     _calorieMap = {};
-    _lastIngredients = [];
     _recipeState = RecipeState.idle;
     notifyListeners();
   }
@@ -184,21 +186,18 @@ class AppProvider extends ChangeNotifier {
   Future<void> setLanguage(String lang) async {
     _language = lang;
     await _storage.setLanguage(lang);
-
-    if (_user != null && !_user!.isAnonymous) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(_user!.uid)
-          .update({'language': lang});
-    }
-
-    await NotificationService.subscribeToLanguageTopics(lang);
     notifyListeners();
 
-    // Tarif yüklüyse aynı malzemelerle yeni dilde yeniden çek (sayaç artmaz)
-    if (_lastIngredients.isNotEmpty && _recipeState == RecipeState.success) {
-      await _searchRecipesInternal(_lastIngredients, incrementCounter: false);
+    // Firestore ve FCM topic güncellemeleri arayüzü bloklamadan arka planda koşar
+    final user = _user;
+    if (user != null && !user.isAnonymous) {
+      unawaited(FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update({'language': lang})
+          .catchError((_) {}));
     }
+    unawaited(NotificationService.subscribeToLanguageTopics(lang));
   }
 
   // ── Tab ───────────────────────────────────────────────────────────────────
@@ -245,6 +244,24 @@ class AppProvider extends ChangeNotifier {
   Future<void> clearDietaryFilters() async {
     _selectedDietaryFilters = [];
     await _storage.saveDietaryFilters(_selectedDietaryFilters);
+    notifyListeners();
+  }
+
+  // ── Pantry (kayıtlı malzemeler) ──────────────────────────────────────────
+  bool isInPantry(String ingredient) =>
+      _pantry.contains(ingredient.trim().toLowerCase());
+
+  Future<void> addToPantry(String ingredient) async {
+    final normalized = ingredient.trim().toLowerCase();
+    if (normalized.isEmpty || _pantry.contains(normalized)) return;
+    _pantry.add(normalized);
+    await _storage.savePantry(_pantry);
+    notifyListeners();
+  }
+
+  Future<void> removeFromPantry(String ingredient) async {
+    _pantry.remove(ingredient.trim().toLowerCase());
+    await _storage.savePantry(_pantry);
     notifyListeners();
   }
 
@@ -303,8 +320,8 @@ class AppProvider extends ChangeNotifier {
         return;
       }
       _errorMessage = _language == 'tr'
-          ? 'Günlük $_dailySearchCount/5 arama hakkınızı kullandınız. Premium\'a geçin!'
-          : 'Daily limit reached ($_dailySearchCount/5). Upgrade to Premium!';
+          ? 'Günlük $_dailySearchCount/${SubscriptionConfig.freeSearchesPerDay} arama hakkınızı kullandınız. Premium\'a geçin!'
+          : 'Daily limit reached ($_dailySearchCount/${SubscriptionConfig.freeSearchesPerDay}). Upgrade to Premium!';
       _recipeState = RecipeState.error;
       notifyListeners();
       return;
@@ -332,12 +349,11 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Search Internal (dil değişiminde sayaç artırmadan çağrılır) ──────────
+  // ── Search Internal ────────────────────────────────────────────────────
   Future<void> _searchRecipesInternal(
     List<String> ingredients, {
     required bool incrementCounter,
   }) async {
-    _lastIngredients = List.from(ingredients);
     _recipeState = RecipeState.loading;
     _errorMessage = null;
     notifyListeners();

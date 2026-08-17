@@ -94,7 +94,7 @@ class SubscriptionService {
     } else {
       // Android: aktif ürün ID ile Play Store abonelik sayfası
       const packageName = 'com.snnydn.recipeai';
-      const productId = SubscriptionConfig.yearlyProductId;
+      const productId = SubscriptionConfig.monthlyProductId;
       uri = Uri.parse(
         'https://play.google.com/store/account/subscriptions'
         '?sku=$productId&package=$packageName',

@@ -10,6 +10,7 @@ class StorageService {
   static const String _recentSearchesKey = 'recent_searches';
   static const String _dietaryFiltersKey = 'dietary_filters';
   static const String _groceryListKey = 'grocery_list';
+  static const String _pantryKey = 'pantry_ingredients';
 
   // ── Favorites ────────────────────────────────────────────────────────────
   Future<List<Recipe>> getFavorites() async {
@@ -136,6 +137,17 @@ class StorageService {
       _groceryListKey,
       items.map((i) => jsonEncode(i.toJson())).toList(),
     );
+  }
+
+  // ── Pantry (kayıtlı malzemeler) ──────────────────────────────────────────
+  Future<List<String>> getPantry() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList(_pantryKey) ?? [];
+  }
+
+  Future<void> savePantry(List<String> ingredients) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_pantryKey, ingredients);
   }
 
   // ── Dietary Filters ───────────────────────────────────────────────────────

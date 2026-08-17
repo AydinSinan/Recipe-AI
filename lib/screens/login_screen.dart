@@ -178,8 +178,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 8),
                 Text(
                   lang == 'tr'
-                      ? 'Günde 5 arama • Kaydetme yok'
-                      : '5 searches/day • No saving',
+                      ? 'Günde 1 arama • Kaydetme yok'
+                      : '1 search/day • No saving',
                   style:
                       GoogleFonts.lato(fontSize: 12, color: AppTheme.textHint),
                 ),

@@ -141,17 +141,14 @@ debugPrint('Bildirim izni reddedildi');
   // Dile göre konulara abone ol (diğer dilden çık)
   static Future<void> subscribeToLanguageTopics(String lang) async {
     if (kIsWeb) return;
-    if (lang == 'tr') {
-      await subscribeToTopic('daily_recipe_tr');
-      await subscribeToTopic('weekly_plan_tr');
-      await unsubscribeFromTopic('daily_recipe_en');
-      await unsubscribeFromTopic('weekly_plan_en');
-    } else {
-      await subscribeToTopic('daily_recipe_en');
-      await subscribeToTopic('weekly_plan_en');
-      await unsubscribeFromTopic('daily_recipe_tr');
-      await unsubscribeFromTopic('weekly_plan_tr');
-    }
+    final subscribeLang = lang == 'tr' ? 'tr' : 'en';
+    final unsubscribeLang = lang == 'tr' ? 'en' : 'tr';
+    await Future.wait([
+      subscribeToTopic('daily_recipe_$subscribeLang'),
+      subscribeToTopic('weekly_plan_$subscribeLang'),
+      unsubscribeFromTopic('daily_recipe_$unsubscribeLang'),
+      unsubscribeFromTopic('weekly_plan_$unsubscribeLang'),
+    ]);
   }
 
   // Premium kullanıcı konusu

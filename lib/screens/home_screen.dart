@@ -75,6 +75,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     setState(() => _ingredients.remove(item));
   }
 
+  void _togglePantryItem(String item) {
+    setState(() {
+      if (_ingredients.contains(item)) {
+        _ingredients.remove(item);
+      } else {
+        _ingredients.add(item);
+      }
+    });
+  }
+
   Future<void> _search(AppProvider provider) async {
     if (_ingredients.isEmpty) return;
     _focusNode.unfocus();
@@ -493,6 +503,37 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         label: i,
                                         onRemove: () =>
                                             _removeIngredient(i),
+                                        isSaved: provider.isInPantry(i),
+                                        onTogglePantry: () =>
+                                            provider.isInPantry(i)
+                                                ? provider.removeFromPantry(i)
+                                                : provider.addToPantry(i),
+                                      ))
+                                  .toList(),
+                            ),
+                          ],
+                          if (provider.pantry.isNotEmpty) ...[
+                            const SizedBox(height: 16),
+                            Text(
+                              AppStrings.get('pantry_title', lang),
+                              style: GoogleFonts.lato(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppTheme.textSecondary,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: provider.pantry
+                                  .map((i) => PantryChip(
+                                        label: i,
+                                        isSelected: _ingredients.contains(i),
+                                        onTap: () => _togglePantryItem(i),
+                                        onDelete: () =>
+                                            provider.removeFromPantry(i),
                                       ))
                                   .toList(),
                             ),

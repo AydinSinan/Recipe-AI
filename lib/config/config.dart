@@ -2,19 +2,16 @@
 class SubscriptionConfig {
   // RevenueCat Product IDs — bunları App Store Connect / Play Console'da oluştur
   static const String monthlyProductId = 'recipeai_premium_monthly';
-  static const String yearlyProductId = 'recipeai_premium_yearly';
 
   // RevenueCat API Keys — console.revenuecat.com'dan al
   static const String revenueCatAppleKey = 'test_HOwPnWRDfCVqFjMfievjhGZewzF';
   static const String revenueCatGoogleKey = 'test_HOwPnWRDfCVqFjMfievjhGZewzF';
 
   // Fiyatlar (RevenueCat'ten dinamik gelir ama fallback için)
-  static const String monthlyPrice = '₺79';
-  static const String yearlyPrice = '₺568';
-  static const String yearlySaving = '%40';
+  static const String monthlyPrice = '₺99';
 
   // Free tier limits
-  static const int freeSearchesPerDay = 5;
+  static const int freeSearchesPerDay = 1;
   static const int freeFavoritesLimit = 5;
   static const int freeCuisinesLimit = 2;
   static const int freeRecipesPerSearch = 4;

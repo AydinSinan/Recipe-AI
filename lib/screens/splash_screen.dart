@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme.dart';
@@ -58,8 +59,11 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final screenW = MediaQuery.of(context).size.width;
-    final logoSize = screenW * 0.88;
+    final screenSize = MediaQuery.of(context).size;
+    // En kısa kenara göre boyutlandır ki geniş/kısa (masaüstü tarayıcı gibi)
+    // pencerelerde logo mevcut yüksekliği taşırıp overflow'a yol açmasın.
+    final logoSize = (math.min(screenSize.width, screenSize.height) * 0.6)
+        .clamp(120.0, 320.0);
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -67,10 +71,12 @@ class _SplashScreenState extends State<SplashScreen>
         children: [
           // ── İçerik ──────────────────────────────────────────────────────
           Center(
-            child: Column(
+            child: SingleChildScrollView(
+              child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                SizedBox(height: screenSize.height * 0.08),
                 // Logo
                 AnimatedBuilder(
                   animation: _controller,
@@ -141,6 +147,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
               ],
+              ),
             ),
           ),
 
@@ -154,7 +161,7 @@ class _SplashScreenState extends State<SplashScreen>
               builder: (_, __) => FadeTransition(
                 opacity: _textFade,
                 child: const Text(
-                  'v1.0.0',
+                  'v1.1.0',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 11,
