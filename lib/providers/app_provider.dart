@@ -34,6 +34,7 @@ class AppProvider extends ChangeNotifier {
   List<String> _pantry = [];
   MealPlan? _mealPlan;
   String? _errorMessage;
+  bool _isStreamingRecipes = false;
 
   // ── UI State ──────────────────────────────────────────────────────────────
   String _language = 'tr';
@@ -60,6 +61,7 @@ class AppProvider extends ChangeNotifier {
   List<String> get pantry => _pantry;
   MealPlan? get mealPlan => _mealPlan;
   String? get errorMessage => _errorMessage;
+  bool get isStreamingRecipes => _isStreamingRecipes;
   String get language => _language;
   int get selectedTab => _selectedTab;
   int get dailySearchCount => _dailySearchCount;
@@ -356,29 +358,30 @@ class AppProvider extends ChangeNotifier {
   }) async {
     _recipeState = RecipeState.loading;
     _errorMessage = null;
+    _recipes = [];
+    _isStreamingRecipes = true;
     notifyListeners();
 
+    final favIds = _favorites.map((f) => f.id).toSet();
+
+    // Kalori tahminini paralelde başlat — tarif akışını bloklamaz.
+    final caloriesFuture = _claude.getIngredientCalories(
+      ingredients: ingredients,
+      language: _language,
+    );
+
     try {
-      final results = await Future.wait([
-        _claude.generateRecipes(
-          ingredients: ingredients,
-          language: _language,
-          selectedCuisines: _selectedCuisines,
-          selectedDietaryFilters: _selectedDietaryFilters,
-          isPremium: _isPremium,
-        ),
-        _claude.getIngredientCalories(
-          ingredients: ingredients,
-          language: _language,
-        ),
-      ]);
-
-      _recipes = results[0] as List<Recipe>;
-      _calorieMap = results[1] as Map<String, int>;
-
-      final favIds = _favorites.map((f) => f.id).toSet();
-      for (var r in _recipes) {
-        r.isFavorite = favIds.contains(r.id);
+      await for (final recipe in _claude.generateRecipesStream(
+        ingredients: ingredients,
+        language: _language,
+        selectedCuisines: _selectedCuisines,
+        selectedDietaryFilters: _selectedDietaryFilters,
+        isPremium: _isPremium,
+      )) {
+        recipe.isFavorite = favIds.contains(recipe.id);
+        _recipes.add(recipe);
+        _recipeState = RecipeState.success;
+        notifyListeners();
       }
 
       if (incrementCounter) {
@@ -388,11 +391,21 @@ class AppProvider extends ChangeNotifier {
         _dailySearchCount++;
         await _storage.addRecentSearch(ingredients);
       }
-
-      _recipeState = RecipeState.success;
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
-      _recipeState = RecipeState.error;
+      // Bazı tarifler zaten geldiyse onları göstermeye devam et; sadece
+      // hiç tarif alınamadıysa hata durumuna geç.
+      if (_recipes.isEmpty) {
+        _errorMessage = e.toString().replaceAll('Exception: ', '');
+        _recipeState = RecipeState.error;
+      }
+    }
+
+    _isStreamingRecipes = false;
+
+    try {
+      _calorieMap = await caloriesFuture;
+    } catch (_) {
+      _calorieMap = {};
     }
 
     notifyListeners();

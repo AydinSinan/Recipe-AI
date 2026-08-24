@@ -605,6 +605,37 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     : '${provider.recipes.length} Recipes Found',
                               );
                             }
+                            if (i > provider.recipes.length) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                AppTheme.primary),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      lang == 'tr'
+                                          ? 'Diğer tarifler hazırlanıyor...'
+                                          : 'Preparing more recipes...',
+                                      style: GoogleFonts.lato(
+                                          fontSize: 13,
+                                          color: AppTheme.textSecondary),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                             final recipe = provider.recipes[i - 1];
                             return RecipeCard(
                               recipe: recipe,
@@ -622,7 +653,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   _showAddToPlanDialog(context, recipe),
                             );
                           },
-                          childCount: provider.recipes.length + 1,
+                          childCount: provider.recipes.length +
+                              1 +
+                              (provider.isStreamingRecipes ? 1 : 0),
                         ),
                       ),
                     ),
