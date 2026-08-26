@@ -1,7 +1,7 @@
 name: recipe_ai
 description: AI-powered multi-cultural recipe app
 publish_to: 'none'
-version: 1.1.0+8
+version: 1.1.0+9
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -27,7 +27,7 @@ dependencies:
   google_sign_in: ^6.2.1
 
   # Subscription
-  purchases_flutter: ^8.0.0
+  purchases_flutter: ^9.0.0
 
   # Local Storage
   shared_preferences: ^2.3.2

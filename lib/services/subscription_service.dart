@@ -66,7 +66,9 @@ class SubscriptionService {
   // ── Purchase ──────────────────────────────────────────────────────────────
   static Future<bool> purchase(Package package) async {
     try {
-      final info = await Purchases.purchasePackage(package);
+      final result =
+          await Purchases.purchase(PurchaseParams.package(package));
+      final info = result.customerInfo;
       final isPrem = info.entitlements.active.containsKey(_entitlementKey);
       if (isPrem) {
         final user = FirebaseAuth.instance.currentUser;
