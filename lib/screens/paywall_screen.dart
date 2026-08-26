@@ -147,7 +147,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   // ── Features ──────────────────────────────────────────────
                   _featureRow('🔍',
                       lang == 'tr' ? 'Sınırsız günlük arama' : 'Unlimited daily searches',
-                      lang == 'tr' ? 'Free: 1/gün' : 'Free: 1/day'),
+                      lang == 'tr' ? 'Free: 2/gün' : 'Free: 2/day'),
                   _featureRow('🌍',
                       lang == 'tr' ? 'Tüm dünya mutfakları' : 'All world cuisines',
                       lang == 'tr' ? 'Free: 2 mutfak' : 'Free: 2 cuisines'),

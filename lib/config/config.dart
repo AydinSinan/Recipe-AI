@@ -11,7 +11,7 @@ class SubscriptionConfig {
   static const String monthlyPrice = '₺99';
 
   // Free tier limits
-  static const int freeSearchesPerDay = 1;
+  static const int freeSearchesPerDay = 2;
   static const int freeFavoritesLimit = 5;
   static const int freeCuisinesLimit = 2;
   static const int freeRecipesPerSearch = 4;
