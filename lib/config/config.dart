@@ -4,8 +4,9 @@ class SubscriptionConfig {
   static const String monthlyProductId = 'recipeai_premium_monthly';
 
   // RevenueCat API Keys — console.revenuecat.com'dan al
+  // TODO: iOS yayına alınınca gerçek Apple production key ile değiştir.
   static const String revenueCatAppleKey = 'test_HOwPnWRDfCVqFjMfievjhGZewzF';
-  static const String revenueCatGoogleKey = 'test_HOwPnWRDfCVqFjMfievjhGZewzF';
+  static const String revenueCatGoogleKey = 'goog_NUdMluZwxkvsKHBauKCznsutTQr';
 
   // Fiyatlar (RevenueCat'ten dinamik gelir ama fallback için)
   static const String monthlyPrice = '₺99';
